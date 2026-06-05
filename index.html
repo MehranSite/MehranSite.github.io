@@ -12,15 +12,15 @@
             font-family: 'Vazir', 'Tahoma', sans-serif;
         }
 
-        body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #1a1a2e;
-            overflow: hidden; /* جلوگیری همیشگی از اسکرول دوتایی بادی */
-        }
-
+		body {
+		    height: 100vh;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    background-color: #1a1a2e;
+		    overflow: hidden; /* جلوگیری همیشگی از اسکرول دوتایی بادی */
+		}
+		
         .page {
             display: none;
             width: 100%;
@@ -929,13 +929,17 @@
             confirmCallback = null;
         };
 
-        function showPage(page) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            page.classList.add('active');
-            sessionStorage.setItem('currentPage', page.id);
-            // اسکرول کردن به بالا هنگام لود شدن صفحه جدید
-            page.scrollTop = 0;
-        }
+		function showPage(page) {
+		    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+		    page.classList.add('active');
+		    sessionStorage.setItem('currentPage', page.id);
+		    
+		    // حل مشکل عدم اسکرول: اجازه اسکرول به بدنه اصلی داده می‌شود تا در صورت بزرگ شدن باکس‌ها اسکرول فعال شود
+		    document.body.style.overflow = 'auto';
+		    
+		    page.scrollTop = 0;
+		}
+		
 
         function goToMainPage() {
             showPage(mainPage);
@@ -1523,18 +1527,20 @@
             }
         };
 
-        // دکمه ورود صفحه اول
-        submitBtn.addEventListener('click', function() {
-            const entered = passwordInput.value.trim();
-            if (entered === MAIN_PASSWORD) {
-                showPage(mainPage);
-                errorDiv.textContent = '';
-                sessionStorage.setItem('loggedIn', 'true');
-            } else {
-                errorDiv.textContent = '❌ رمز عبور اشتباه است، عزیزم پی‌وی بپرس';
-                passwordInput.value = '';
-            }
-        });
+		// دکمه ورود صفحه اول
+		submitBtn.addEventListener('click', function() {
+		    const entered = passwordInput.value.trim();
+		    if (entered === MAIN_PASSWORD) {
+		        showPage(mainPage);
+		        errorDiv.textContent = '';
+		        sessionStorage.setItem('loggedIn', 'true');
+		        // اطمینان از فعال بودن اسکرول پس از ورود موفق
+		        document.body.style.overflow = 'auto';
+		    } else {
+		        errorDiv.textContent = '❌ رمز عبور اشتباه است، عزیزم پی‌وی بپرس';
+		        passwordInput.value = '';
+		    }
+		});
 
         passwordInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') submitBtn.click();
@@ -1591,30 +1597,31 @@
             }
         });
 
-        // مدیریت لود وضعیت مرورگر و بازسازی امن آخرین صفحه
-        window.addEventListener('load', function() {
-            const loggedIn = sessionStorage.getItem('loggedIn');
-            const activeProfile = sessionStorage.getItem('activeProfile');
-            const lastPage = sessionStorage.getItem('currentPage');
-            
-            if (loggedIn === 'true') {
-                if (activeProfile === 'mehran') {
-                    renderProfile('mehran');
-                    showPage(mehranPage);
-                } else if (activeProfile === 'melorin') {
-                    renderProfile('melorin');
-                    showPage(melorinPage);
-                } else if (lastPage === 'public-page') {
-                    updatePublicPage();
-                    showPage(publicPage);
-                } else {
-                    showPage(mainPage);
-                }
-            } else {
-                showPage(loginPage);
-                passwordInput.focus();
-            }
-        });
+		// مدیریت لود وضعیت مرورگر و بازسازی امن آخرین صفحه
+		window.addEventListener('load', function() {
+		    const loggedIn = sessionStorage.getItem('loggedIn');
+		    const activeProfile = sessionStorage.getItem('activeProfile');
+		    const lastPage = sessionStorage.getItem('currentPage');
+		    
+		    if (loggedIn === 'true') {
+		        document.body.style.overflow = 'auto'; // فعال‌سازی اسکرول در صورت لاگین بودن
+		        if (activeProfile === 'mehran') {
+		            renderProfile('mehran');
+		            showPage(mehranPage);
+		        } else if (activeProfile === 'melorin') {
+		            renderProfile('melorin');
+		            showPage(melorinPage);
+		        } else if (lastPage === 'public-page') {
+		            updatePublicPage();
+		            showPage(publicPage);
+		        } else {
+		            showPage(mainPage);
+		        }
+		    } else {
+		        showPage(loginPage);
+		        passwordInput.focus();
+		    }
+		});
 
         // آپدیت ثانیه‌ای تایمر
         setInterval(() => {
