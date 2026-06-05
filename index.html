@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>M&M❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazir', 'Tahoma', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1a1a2e;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow-y: auto;
+        }
+        .page.active {
+            display: block;
+        }
+
+        #login-page {
+            background-image: url('pic1.jpg');
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #login-page:not(.active) {
+            display: none;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px 20px;
+            background: #2d2d4a;
+            border-radius: 40px;
+            border: 2px solid #6c3483;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        #password-input {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            text-align: center;
+            background: #ecf0f1;
+            outline: none;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        #submit-btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 50px;
+            background-color: #ff6b6b;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+        }
+
+        #submit-btn:hover {
+            background-color: #ff4757;
+        }
+
+        .error-message {
+            margin-top: 15px;
+            color: #ffcccc;
+            font-size: 1rem;
+            min-height: 40px;
+            font-weight: bold;
+        }
+
+        #main-page {
+            background-image: url('pic2.jpg');
+            background-size: cover;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        #main-page.active {
+            display: flex;
+        }
+
+        .boxes-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .box {
+            flex: 1 1 250px;
+            height: 300px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: #2d2d4a;
+            border: 3px solid #9b59b6;
+        }
+
+        .box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: #2d2d4a;
+            padding: 30px 25px;
+            border-radius: 40px;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            direction: rtl;
+            border: 2px solid #9b59b6;
+            color: white;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #f1c40f;
+            font-size: 1.8rem;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #9b59b6;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            text-align: center;
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .modal-content button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            background: #9b59b6;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 5px;
+            border: 1px solid #8e44ad;
+        }
+
+        .modal-content button.cancel { background: #e74c3c; }
+
+        .modal-error {
+            color: #ff6b6b;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        .inner-page {
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 20px;
+        }
+
+        #public-page {
+            background-image: url('pic3.jpg');
+        }
+        #mehran-page {
+            background-image: url('pic5.jpg');
+        }
+        #melorin-page {
+            background-image: url('pic4.jpg');
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2d2d4a;
+            padding: 12px 20px;
+            border-radius: 60px;
+            margin-bottom: 30px;
+            border: 2px solid #9b59b6;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .page-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: #f1c40f;
+            text-shadow: 0 0 5px rgba(241,196,15,0.5);
+            flex: 1 1 auto;
+            text-align: center;
+        }
+
+        .home-btn {
+            background: #34495e;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: 1px solid #9b59b6;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .home-btn:hover {
+            background: #4a6fa5;
+            border-color: #f1c40f;
+        }
+
+        .public-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #2d2d4a;
+            border-radius: 50px;
+            padding: 30px;
+            border: 2px solid #9b59b6;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            direction: ltr;
+            margin-bottom: 30px;
+        }
+
+        .timer-item {
+            text-align: center;
+            background: #1e1e3f;
+            border-radius: 30px;
+            padding: 15px 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 1px solid #9b59b6;
+        }
+
+        .timer-label {
+            font-size: 1.2rem;
+            color: #f39c12;
+            margin-bottom: 8px;
+        }
+
+        .timer-value {
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: 'Times New Roman', monospace;
+            background: #0f0f1f;
+            padding: 5px;
+            border-radius: 20px;
+            color: #fff;
+        }
+
+        .special-reason-box {
+            background: #4a235a;
+            border: 2px solid #9b59b6;
+            border-radius: 60px;
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: #f1c40f;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .reason-item {
+            background: #2c3e50;
+            margin: 10px 0;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            border-right: 5px solid #ff6b6b;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+            color: white;
+        }
+        .reason-item:hover {
+            background: #34495e;
+        }
+
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .section-card {
+            background: #2d2d4a;
+            border-radius: 40px;
+            padding: 20px;
+            border: 2px solid;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+        }
+        .section-card:nth-child(1) { border-color: #9b59b6; }
+        .section-card:nth-child(2) { border-color: #3498db; }
+        .section-card:nth-child(3) { border-color: #2ecc71; }
+        .section-card:nth-child(4) { border-color: #f39c12; }
+        .section-card:nth-child(5) { border-color: #e74c3c; }
+        .section-card:nth-child(6) { border-color: #1abc9c; }
+        .section-card:nth-child(7) { border-color: #e67e22; }
+        .section-card:nth-child(8) { border-color: #9b59b6; }
+        .section-card:nth-child(9) { border-color: #3498db; }
+        .section-card:nth-child(10) { border-color: #2ecc71; }
+        .section-card:nth-child(11) { border-color: #f39c12; }
+        .section-card:nth-child(12) { border-color: #e74c3c; }
+        .section-card:nth-child(13) { border-color: #1abc9c; }
+
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 8px;
+            color: #f1c40f;
+        }
+
+        .items-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-left: 5px;
+            background: #1e1e3f;
+            border-radius: 30px;
+            padding: 15px;
+        }
+
+        .item-card {
+            background: #2c3e50;
+            border-radius: 25px;
+            padding: 12px;
+            position: relative;
+            border-left: 3px solid #ff6b6b;
+            color: white;
+        }
+        .item-card:hover {
+            background: #34495e;
+        }
+
+        .item-card img, .item-card video {
+            max-width: 100%;
+            border-radius: 20px;
+            margin-top: 8px;
+        }
+
+        .item-reason {
+            font-size: 0.9rem;
+            color: #ddd;
+            margin-top: 5px;
+            font-style: italic;
+            background: #1a1a2e;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            border: 1px solid #c0392b;
+        }
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+
+        .add-btn {
+            background: #34495e;
+            border: 2px dashed #9b59b6;
+            color: white;
+            padding: 12px;
+            border-radius: 40px;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .add-btn:hover {
+            background: #4a6fa5;
+            border-color: #f1c40f;
+        }
+
+        .add-form {
+            background: #1e1e3f;
+            border-radius: 30px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+            border: 1px solid #9b59b6;
+        }
+        .add-form.active { display: block; }
+
+        .add-form input, .add-form textarea, .add-form select {
+            width: 100%;
+            padding: 10px 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .add-form button {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 30px;
+            background: #2ecc71;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 8px;
+            border: 1px solid #27ae60;
+        }
+        .add-form button.cancel { background: #e74c3c; border-color: #c0392b; }
+
+        .chat-message {
+            background: #2980b9;
+            border-radius: 25px;
+            padding: 8px 15px;
+            margin: 5px 0;
+            max-width: 80%;
+            align-self: flex-start;
+            position: relative;
+            border: 1px solid #3498db;
+        }
+        .chat-message.own {
+            background: #8e44ad;
+            align-self: flex-end;
+            border-color: #9b59b6;
+        }
+        .chat-sender {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 4px;
+            color: #f1c40f;
+        }
+        .chat-delete {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #c0392b;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 6px;
+            border-radius: 40px;
+            border: none;
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+        .chat-input-area button {
+            padding: 12px 20px;
+            border-radius: 40px;
+            border: none;
+            background: #f39c12;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid #e67e22;
+        }
+        .chat-input-area button:hover {
+            background: #e67e22;
+        }
+
+        .game-item {
+            background: #2c3e50;
+            padding: 10px;
+            border-radius: 20px;
+        }
+        .game-item a {
+            color: #f1c40f;
+            text-decoration: none;
+        }
+
+        .change-password {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background: #2d2d4a;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            border: 2px dashed #9b59b6;
+            transition: 0.3s;
+            color: white;
+        }
+        .change-password:hover {
+            background: #4a235a;
+            border-color: #f1c40f;
+        }
+
+        @media (max-width: 90000px) {
+            h1 { font-size: 2rem; }
+            .box { height: 180px; font-size: 1.4rem; }
+            .page-header h2 { font-size: 1.3rem; }
+            .timer-value { font-size: 1.5rem; }
+            .timer-label { font-size: 1rem; }
+            .section-title { font-size: 1.3rem; }
+            .item-card { font-size: 0.9rem; padding: 10px; }
+            .add-btn { font-size: 1rem; padding: 10px; }
+            .sections-grid { gap: 15px; }
+            .section-card { padding: 15px; }
+            .home-btn { padding: 8px 12px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">رمز پروفایل</h2>
+            <input type="password" id="modal-password" placeholder="رمز را وارد کنید">
+            <div>
+                <button id="modal-submit">✅ تایید</button>
+                <button class="cancel" id="modal-cancel">❌ انصراف</button>
+            </div>
+            <div id="modal-error" class="modal-error"></div>
+        </div>
+    </div>
+
+    <div id="login-page" class="page active">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1>✨ خوش اومدی عزیزم ✨</h1>
+            <input type="password" id="password-input" placeholder="رمز عبور را وارد کن" maxlength="20">
+            <button id="submit-btn">💫 تایید</button>
+            <div id="error-message" class="error-message"></div>
+        </div>
+    </div>
+
+    <div id="main-page" class="page">
+        <div class="boxes-container">
+            <div class="box" data-profile="mehran">💙 پروفایل مهران</div>
+            <div class="box" data-profile="public">💚 عمومی</div>
+            <div class="box" data-profile="melorin">💜 پروفایل ملورین</div>
+        </div>
+    </div>
+
+    <div id="public-page" class="page inner-page">
+        <div class="page-header">
+            <button class="home-btn" onclick="goToMainPage()">🏠 بازگشت به خانه</button>
+            <h2>✨ صفحه عمومی ✨</h2>
+        </div>
+        <div class="public-container">
+            <div class="timer-grid">
+                <div class="timer-item"><div class="timer-label">روز</div><div class="timer-value" id="timer-days">0</div></div>
+                <div class="timer-item"><div class="timer-label">ساعت</div><div class="timer-value" id="timer-hours">0</div></div>
+                <div class="timer-item"><div class="timer-label">دقیقه</div><div class="timer-value" id="timer-minutes">0</div></div>
+                <div class="timer-item"><div class="timer-label">ثانیه</div><div class="timer-value" id="timer-seconds">0</div></div>
+            </div>
+            <div class="special-reason-box">❤️چرا عاشقتم؟❤️</div>
+            <div id="reasons-list"></div>
+        </div>
+    </div>
+
+    <div id="mehran-page" class="page inner-page">
+        <div class="page-header">
+            <button class="home-btn" onclick="goToMainPage()">🏠 بازگشت به خانه</button>
+            <h2>💙 پروفایل مهران</h2>
+        </div>
+        <div class="sections-grid" id="mehran-sections"></div>
+        <div class="change-password" onclick="changePassword('mehran')">🔑 میخوای رمزت رو عوض کنی؟</div>
+    </div>
+
+    <div id="melorin-page" class="page inner-page">
+        <div class="page-header">
+            <button class="home-btn" onclick="goToMainPage()">🏠 بازگشت به خانه</button>
+            <h2>💜 پروفایل ملورین</h2>
+        </div>
+        <div class="sections-grid" id="melorin-sections"></div>
+        <div class="change-password" onclick="changePassword('melorin')">🔑 میخوای رمزت رو عوض کنی؟</div>
+    </div>
+
+    <script>
+        let MEHRAN_PASSWORD = localStorage.getItem('mehran_password') || "MEHRAN_J";
+        let MELORIN_PASSWORD = localStorage.getItem('melorin_password') || "MELI_MEOW";
+        const MAIN_PASSWORD = "M&MBF";
+
+        const START_DATE = new Date(2026, 5, 5, 0, 0, 0);
+        
+        const reasonsList = [
+            "چون داشتنت بهم حس غرور میده",   
+            "چون منو بیشتر از بقیه آدم امن زندگیت میدونی",                                                                
+            "چون کنارت بهم خوش میگذره",     
+            "چون کل روز بهت فکر میکنم",
+            "چون میخوام همش توی بغلم باشی",                 
+            "چون بهم دلیل برای زندگی دادی",
+            "چون میدونم خوشگلترین دختر داره باهام حرف میزنه",
+            "چون هر وقت باهات حرف میزنم حتی وقتی تحویلم نمیگیری لبخند به لبم میاری", 
+            "چون خوشگلترین صدا رو داری",           
+            "چون کوچولو و فنچ و کیوتی",            
+            "چون مشخصه همیشه به ظاهر و پاکیزگی اهمیت میدی",           
+            "چون گذشت داری و میبخشی",
+            "چون دوست دارم بی نهایت ببوسمت",    
+            "چون منو وابسته خودت کردی",           
+            "چون موهات خیلی خوشگلن",                    
+            "چون عصبانیت و قهر کردناتم بامزست",
+            "چون سلیقه فیلم و سریال شبیه به هم داریم",
+            "چون خیلی خوش استایلی",          
+            "چون دوست دارم باهات برقصم",            
+            "چون حس میکنم هر روز بیشتر از دیروز دوستت دارم",
+            "چون دوست دارم فیلمای مورد علاقمو ببینی",          
+            "چون وقتی نوتیفت میاد خر ذوق میشم",          
+            "چون خیلی زود با نبودنت دلم برات تنگ میشه",                   
+            "چون وقتی باهات حرف میزنم گذر زمان رو حس نمیکنم",           
+            "چون جای خالیتو هیچی پر نمیکنه",
+            "چون بهترین هدیه ای هستی که خدا بهم داده",
+            "چون بعد از آشنایی با تو حس میکنم هیچوقت هیچ دختری دیگه قرار نیست به چشمم بیاد"
+        ];
+
+        const loginPage = document.getElementById('login-page');
+        const mainPage = document.getElementById('main-page');
+        const passwordInput = document.getElementById('password-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const errorDiv = document.getElementById('error-message');
+
+        const modal = document.getElementById('profile-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalPassword = document.getElementById('modal-password');
+        const modalSubmit = document.getElementById('modal-submit');
+        const modalCancel = document.getElementById('modal-cancel');
+        const modalError = document.getElementById('modal-error');
+
+        const publicPage = document.getElementById('public-page');
+        const mehranPage = document.getElementById('mehran-page');
+        const melorinPage = document.getElementById('melorin-page');
+
+        const timerDays = document.getElementById('timer-days');
+        const timerHours = document.getElementById('timer-hours');
+        const timerMinutes = document.getElementById('timer-minutes');
+        const timerSeconds = document.getElementById('timer-seconds');
+        const reasonsContainer = document.getElementById('reasons-list');
+
+        let pendingProfile = null;
+
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            page.classList.add('active');
+            sessionStorage.setItem('currentPage', page.id);
+        }
+
+        function goToMainPage() {
+            showPage(mainPage);
+            sessionStorage.removeItem('activeProfile');
+        }
+
+        function getTimeDifference() {
+            const now = new Date();
+            const diffMs = now - START_DATE;
+            if (diffMs < 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+            const seconds = Math.floor(diffMs / 1000);
+            const days = Math.floor(seconds / 86400);
+            const hours = Math.floor((seconds % 86400) / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return { days, hours, minutes, seconds: secs };
+        }
+
+        function updatePublicPage() {
+            const { days, hours, minutes, seconds } = getTimeDifference();
+            timerDays.textContent = days;
+            timerHours.textContent = hours;
+            timerMinutes.textContent = minutes;
+            timerSeconds.textContent = seconds;
+
+            reasonsContainer.innerHTML = '';
+            for (let i = 0; i < Math.min(days, reasonsList.length); i++) {
+                const div = document.createElement('div');
+                div.className = 'reason-item';
+                div.innerText = reasonsList[i];
+                reasonsContainer.appendChild(div);
+            }
+            if (days === 0) {
+                reasonsContainer.innerHTML = '<div class="reason-item">هنوز روزی نگذشته عزیزم. به ازای هر روزی که بگذره یه دلیل جدید اینجا میبینی پس از فردا به اینجا سر بزن. خیلی دوستت دارم💜</div>';
+            }
+            if (days > reasonsList.length) {
+                const extra = document.createElement('div');
+                extra.className = 'reason-item';
+                extra.innerText = '... و باز هم دلایل بیشتر که بعداً اضافه می‌کنم ✨';
+                reasonsContainer.appendChild(extra);
+            }
+        }
+
+        function getProfileData(profile, section) {
+            if (section === 'chat') {
+                const data = localStorage.getItem('global_chat');
+                return data ? JSON.parse(data) : [];
+            }
+            if (section === 'letters') {
+                const data = localStorage.getItem('global_letters');
+                return data ? JSON.parse(data) : [];
+            }
+            if (section === 'dreams') {
+                const data = localStorage.getItem('global_dreams');
+                return data ? JSON.parse(data) : [];
+            }
+            if (section === 'memories') {
+                const data = localStorage.getItem('global_memories');
+                return data ? JSON.parse(data) : [];
+            }
+            const key = `${profile}_${section}`;
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveProfileData(profile, section, data) {
+            if (section === 'chat') {
+                localStorage.setItem('global_chat', JSON.stringify(data));
+            } else if (section === 'letters') {
+                localStorage.setItem('global_letters', JSON.stringify(data));
+            } else if (section === 'dreams') {
+                localStorage.setItem('global_dreams', JSON.stringify(data));
+            } else if (section === 'memories') {
+                localStorage.setItem('global_memories', JSON.stringify(data));
+            } else {
+                const key = `${profile}_${section}`;
+                localStorage.setItem(key, JSON.stringify(data));
+            }
+        }
+
+        const profileSections = [
+            { 
+                id: 'info', 
+                title: '📋 اطلاعات من', 
+                type: 'info', 
+                hasReason: false, 
+                addType: 'info' 
+            },
+            { id: 'pics', title: '📸 عکس‌ها و کلیپایی که دوست دارم', type: 'media', hasReason: true, accept: 'image/jpeg,image/png,video/mp4', addType: 'file' },
+            { id: 'movies', title: '🎬 فیلم‌ها و سریال‌های مورد علاقه', type: 'movie', hasReason: true, addType: 'movie' },
+            { id: 'songs', title: '🎵 آهنگ‌های مورد علاقه', type: 'song', hasReason: true, addType: 'song' },
+            { id: 'places', title: '📍 مکان‌های مورد علاقه', type: 'place', hasReason: true, addType: 'location' },
+            { id: 'notes', title: '📝 یادداشت‌های من', type: 'text', hasReason: false, addType: 'text' },
+            { id: 'other', title: '🎨 سایر علاقه‌مندی‌ها', type: 'media', hasReason: true, accept: '*/*', addType: 'file' },
+            { id: 'games', title: '🎮 بازی‌هایی که دوست دارم باهم تجربه کنیم', type: 'game', hasReason: false, addType: 'game' },
+            { id: 'letters', title: '💌 نامه و حرف‌های عاشقانه', type: 'sharedText', hasReason: false, addType: 'text' },
+            { id: 'dreams', title: '✨ کارایی که دوست دارم باهم انجام بدیم', type: 'sharedText', hasReason: false, addType: 'text' },
+            { id: 'memories', title: '📖 خاطرات مشترک', type: 'memory', hasReason: true, addType: 'memory' },
+            { id: 'chat', title: '💬 چت با عشقم', type: 'chat', hasReason: false }
+        ];
+        
+        function renderItems(profile, section, items, container) {
+            container.innerHTML = '';
+            items.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item-card';
+
+                if (section.type === 'info') {
+                    let html = '';
+                    if (item.profilePic) {
+                        html += `<img src="${item.profilePic}" style="max-width:100px; border-radius:50%; margin-bottom:10px;">`;
+                    }
+                    if (item.name) html += `<div><strong>نام:</strong> ${item.name}</div>`;
+                    if (item.birth) html += `<div><strong>تاریخ تولد:</strong> ${item.birth}</div>`;
+                    if (item.birthPlace) html += `<div><strong>محل تولد:</strong> ${item.birthPlace}</div>`;
+                    if (item.livingPlace) html += `<div><strong>محل زندگی:</strong> ${item.livingPlace}</div>`;
+                    if (item.favoriteFood) html += `<div><strong>خوراکی مورد علاقه:</strong> ${item.favoriteFood}</div>`;
+                    if (item.favoriteSport) html += `<div><strong>ورزش مورد علاقه:</strong> ${item.favoriteSport}</div>`;
+                    if (item.favoriteColor) html += `<div><strong>رنگ مورد علاقه:</strong> ${item.favoriteColor}</div>`;
+                    if (item.favoriteMovie) html += `<div><strong>فیلم مورد علاقه:</strong> ${item.favoriteMovie}</div>`;
+                    if (item.favoriteMusic) html += `<div><strong>آهنگ مورد علاقه:</strong> ${item.favoriteMusic}</div>`;
+                    if (item.favoriteBook) html += `<div><strong>کتاب مورد علاقه:</strong> ${item.favoriteBook}</div>`;
+                    if (item.favoriteAnimal) html += `<div><strong>حیوان مورد علاقه:</strong> ${item.favoriteAnimal}</div>`;
+                    if (item.favoriteSeason) html += `<div><strong>فصل مورد علاقه:</strong> ${item.favoriteSeason}</div>`;
+                    if (item.favoriteFlower) html += `<div><strong>گل مورد علاقه:</strong> ${item.favoriteFlower}</div>`;
+                    if (item.favoriteEntertainment) html += `<div><strong>تفریح مورد علاقه:</strong> ${item.favoriteEntertainment}</div>`;
+                    if (item.extra) html += `<div class="extra-info"><strong>✨ یه چیز دیگه:</strong> ${item.extra}</div>`;
+                    itemDiv.innerHTML = html;
+                } else if (section.type === 'text') {
+                    itemDiv.innerHTML = `<div>${item.content}</div>`;
+                } else if (section.type === 'media') {
+                    if (item.type === 'image') {
+                        itemDiv.innerHTML = `<img src="${item.content}" style="max-width:100%; border-radius:15px;">`;
+                    } else if (item.type === 'video') {
+                        itemDiv.innerHTML = `<video controls style="max-width:100%; border-radius:15px;"><source src="${item.content}" type="video/mp4"></video>`;
+                    } else {
+                        itemDiv.innerHTML = `<div>${item.content}</div>`;
+                    }
+                } else if (section.type === 'movie' || section.type === 'song') {
+                    let html = `<div><strong>${item.name}</strong></div>`;
+                    if (item.link) html += `<div><a href="${item.link}" target="_blank" style="color:#f1c40f;">🔗 لینک</a></div>`;
+                    if (item.reason) html += `<div class="item-reason">💬 ${item.reason}</div>`;
+                    if (item.poster && section.type === 'movie') {
+                        html += `<img src="${item.poster}" style="max-width:100%; border-radius:15px; margin-top:8px;">`;
+                    }
+                    itemDiv.innerHTML = html;
+                } else if (section.type === 'place') {
+                    itemDiv.innerHTML = `<div><strong>${item.location || 'مکان'}</strong>${item.content ? '<br><img src="'+item.content+'" style="max-width:100%">' : ''}</div>`;
+                } else if (section.type === 'game') {
+                    itemDiv.innerHTML = `<div class="game-item"><strong>${item.name}</strong> - <a href="${item.link}" target="_blank">🔗 لینک دانلود</a></div>`;
+                } else if (section.type === 'memory') {
+                    let html = `<div><strong>${item.date || 'بدون تاریخ'}</strong></div>`;
+                    html += `<div>${item.content}</div>`;
+                    if (item.image) html += `<img src="${item.image}" style="max-width:100%; border-radius:15px; margin-top:8px;">`;
+                    itemDiv.innerHTML = html;
+                }
+
+                if (item.reason && section.hasReason && section.type !== 'movie' && section.type !== 'song' && section.type !== 'info') {
+                    itemDiv.innerHTML += `<div class="item-reason">💬 ${item.reason}</div>`;
+                }
+
+                const delBtn = document.createElement('button');
+                delBtn.className = 'delete-btn';
+                delBtn.innerHTML = '🗑️';
+                delBtn.onclick = () => {
+                    if (confirm('آیا مطمئنی؟')) {
+                        items.splice(index, 1);
+                        saveProfileData(profile, section.id, items);
+                        renderItems(profile, section, items, container);
+                    }
+                };
+                itemDiv.appendChild(delBtn);
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function renderSharedItems(profile, section, items, container) {
+            container.innerHTML = '';
+            items.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                const isOwn = (profile === 'mehran' && item.sender === 'مهران') || (profile === 'melorin' && msg.sender === 'ملورین');
+                itemDiv.className = `chat-message ${isOwn ? 'own' : ''}`;
+                itemDiv.innerHTML = `
+                    <div class="chat-sender">${item.sender}</div>
+                    <div>${item.content}</div>
+                    <button class="chat-delete" onclick="deleteSharedItem('${profile}', '${section.id}', ${index})">🗑️</button>
+                `;
+                container.appendChild(itemDiv);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        window.deleteSharedItem = function(profile, sectionId, index) {
+            if (confirm('آیا مطمئنی؟')) {
+                const items = getProfileData(profile, sectionId);
+                items.splice(index, 1);
+                saveProfileData(profile, sectionId, items);
+                const container = document.getElementById(`${profile}_${sectionId}_items`);
+                const section = profileSections.find(s => s.id === sectionId);
+                renderSharedItems(profile, section, items, container);
+            }
+        };
+
+        function showAddForm(profile, section) {
+            const formId = `${profile}_${section.id}_form`;
+            const formDiv = document.getElementById(formId);
+            if (!formDiv) return;
+            formDiv.classList.toggle('active');
+            if (!formDiv.classList.contains('active')) return;
+
+            let html = '';
+            if (section.addType === 'info') {
+                html = `
+                    <input type="file" id="${profile}_${section.id}_profilePic" accept="image/*" placeholder="عکس پروفایل">
+                    <input type="text" id="${profile}_${section.id}_name" placeholder="نام">
+                    <input type="text" id="${profile}_${section.id}_birth" placeholder="تاریخ تولد">
+                    <input type="text" id="${profile}_${section.id}_birthPlace" placeholder="محل تولد">
+                    <input type="text" id="${profile}_${section.id}_livingPlace" placeholder="محل زندگی">
+                    <input type="text" id="${profile}_${section.id}_favoriteFood" placeholder="خوراکی مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteSport" placeholder="ورزش مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteColor" placeholder="رنگ مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteMovie" placeholder="فیلم مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteMusic" placeholder="آهنگ مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteBook" placeholder="کتاب مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteAnimal" placeholder="حیوان مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteSeason" placeholder="فصل مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteFlower" placeholder="گل مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteEntertainment" placeholder="تفریح مورد علاقه">
+                    <textarea id="${profile}_${section.id}_extra" placeholder="✨ یه چیز دیگه"></textarea>
+                    <button onclick="addInfoItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
+                `;
+            } else if (section.addType === 'text') {
+                html = `
+                    <textarea id="${profile}_${section.id}_text" placeholder="متن خود را بنویسید..."></textarea>
+                    <button onclick="addTextItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
+                `;
+            } else if (section.addType === 'file') {
+                html = `
+                    <input type="file" id="${profile}_${section.id}_file" accept="${section.accept}">
+                    <input type="text" id="${profile}_${section.id}_reason" placeholder="💬 دلیل">
+                    <button onclick="addFileItem('${profile}', '${section.id}')">📤 آپلود</button>
+                    <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
+                `;
+            } else if (section.addType === 'location') {
+                html = `
+                    <input type="text" id="${profile}_${section.id}_location" placeholder="نام مکان">
+                    <input type="file" id="${profile}_${section.id}_file" accept="image/*">
+                    <input type="text" id="${profile}_${section.id}_reason" placeholder="💬 دلیل">
+                    <button onclick="addLocationItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
+                `;
+            } else if (section.addType === 'game') {
+                html = `
+                    <input type="text" id="${profile}_${section.id}_name" placeholder="نام بازی">
+                    <input type="url" id="${profile}_${section.id}_link" placeholder="لینک دانلود">
+                    <button onclick="addGameItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
+                `;
+            } else if (section.addType === 'movie' || section.addType === 'song') {
+                html = `
+                    <input type="text" id="${profile}_${section.id}_name" placeholder="نام">
+                    <input type="url" id="${profile}_${section.id}_link" placeholder="لینک دانلود">
+                    <input type="text" id="${profile}_${section.id}_reason" placeholder="💬 دلیل">
+                    ${section.addType === 'movie' ? `<input type="file" id="${profile}_${section.id}_poster" accept="image/*" placeholder="پوستر">` : ''}
+                    <button onclick="addMovieSongItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
+                `;
+            } else if (section.addType === 'memory') {
+                html = `
+                    <input type="date" id="${profile}_${section.id}_date" placeholder="تاریخ">
+                    <textarea id="${profile}_${section.id}_text" placeholder="متن خاطره"></textarea>
+                    <input type="file" id="${profile}_${section.id}_file" accept="image/*">
+                    <button onclick="addMemoryItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
+                `;
+            }
+            formDiv.innerHTML = html;
+        }
+
+        window.addInfoItem = function(profile, sectionId) {
+            const profilePicInput = document.getElementById(`${profile}_${sectionId}_profilePic`);
+            const name = document.getElementById(`${profile}_${sectionId}_name`).value.trim();
+            const birth = document.getElementById(`${profile}_${sectionId}_birth`).value.trim();
+            const birthPlace = document.getElementById(`${profile}_${sectionId}_birthPlace`).value.trim();
+            const livingPlace = document.getElementById(`${profile}_${sectionId}_livingPlace`).value.trim();
+            const favoriteFood = document.getElementById(`${profile}_${sectionId}_favoriteFood`).value.trim();
+            const favoriteSport = document.getElementById(`${profile}_${sectionId}_favoriteSport`).value.trim();
+            const favoriteColor = document.getElementById(`${profile}_${sectionId}_favoriteColor`).value.trim();
+            const favoriteMovie = document.getElementById(`${profile}_${sectionId}_favoriteMovie`).value.trim();
+            const favoriteMusic = document.getElementById(`${profile}_${sectionId}_favoriteMusic`).value.trim();
+            const favoriteBook = document.getElementById(`${profile}_${sectionId}_favoriteBook`).value.trim();
+            const favoriteAnimal = document.getElementById(`${profile}_${sectionId}_favoriteAnimal`).value.trim();
+            const favoriteSeason = document.getElementById(`${profile}_${sectionId}_favoriteSeason`).value.trim();
+            const favoriteFlower = document.getElementById(`${profile}_${sectionId}_favoriteFlower`).value.trim();
+            const favoriteEntertainment = document.getElementById(`${profile}_${sectionId}_favoriteEntertainment`).value.trim();
+            const extra = document.getElementById(`${profile}_${sectionId}_extra`).value.trim();
+
+            if (profilePicInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const items = getProfileData(profile, sectionId);
+                    items.push({
+                        profilePic: e.target.result,
+                        name, birth, birthPlace, livingPlace, favoriteFood, favoriteSport,
+                        favoriteColor, favoriteMovie, favoriteMusic, favoriteBook,
+                        favoriteAnimal, favoriteSeason, favoriteFlower, favoriteEntertainment, extra
+                    });
+                    saveProfileData(profile, sectionId, items);
+                    const container = document.getElementById(`${profile}_${sectionId}_items`);
+                    const section = profileSections.find(s => s.id === sectionId);
+                    renderItems(profile, section, items, container);
+                    document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+                };
+                reader.readAsDataURL(profilePicInput.files[0]);
+            } else {
+                const items = getProfileData(profile, sectionId);
+                items.push({
+                    profilePic: null,
+                    name, birth, birthPlace, livingPlace, favoriteFood, favoriteSport,
+                    favoriteColor, favoriteMovie, favoriteMusic, favoriteBook,
+                    favoriteAnimal, favoriteSeason, favoriteFlower, favoriteEntertainment, extra
+                });
+                saveProfileData(profile, sectionId, items);
+                const container = document.getElementById(`${profile}_${sectionId}_items`);
+                const section = profileSections.find(s => s.id === sectionId);
+                renderItems(profile, section, items, container);
+                document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+            }
+        };
+
+        window.addTextItem = function(profile, sectionId) {
+            const text = document.getElementById(`${profile}_${sectionId}_text`).value.trim();
+            if (!text) return;
+            const items = getProfileData(profile, sectionId);
+            const section = profileSections.find(s => s.id === sectionId);
+            if (section.type === 'sharedText') {
+                const sender = (profile === 'mehran') ? 'مهران' : 'ملورین';
+                items.push({ sender: sender, content: text });
+            } else {
+                items.push({ content: text });
+            }
+            saveProfileData(profile, sectionId, items);
+            const container = document.getElementById(`${profile}_${sectionId}_items`);
+            if (section.type === 'sharedText') {
+                renderSharedItems(profile, section, items, container);
+            } else {
+                renderItems(profile, section, items, container);
+            }
+            document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+        };
+
+        window.addFileItem = function(profile, sectionId) {
+            const fileInput = document.getElementById(`${profile}_${sectionId}_file`);
+            const reason = document.getElementById(`${profile}_${sectionId}_reason`).value.trim();
+            if (!fileInput.files[0]) return;
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const items = getProfileData(profile, sectionId);
+                let type = 'file';
+                if (file.type.startsWith('image/')) type = 'image';
+                else if (file.type.startsWith('video/')) type = 'video';
+                items.push({ content: e.target.result, reason: reason, type: type });
+                saveProfileData(profile, sectionId, items);
+                const container = document.getElementById(`${profile}_${sectionId}_items`);
+                const section = profileSections.find(s => s.id === sectionId);
+                renderItems(profile, section, items, container);
+                document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.addLocationItem = function(profile, sectionId) {
+            const location = document.getElementById(`${profile}_${sectionId}_location`).value.trim();
+            const fileInput = document.getElementById(`${profile}_${sectionId}_file`);
+            const reason = document.getElementById(`${profile}_${sectionId}_reason`).value.trim();
+            const items = getProfileData(profile, sectionId);
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    items.push({ location: location, content: e.target.result, reason: reason });
+                    saveProfileData(profile, sectionId, items);
+                    const container = document.getElementById(`${profile}_${sectionId}_items`);
+                    const section = profileSections.find(s => s.id === sectionId);
+                    renderItems(profile, section, items, container);
+                    document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                items.push({ location: location, content: null, reason: reason });
+                saveProfileData(profile, sectionId, items);
+                const container = document.getElementById(`${profile}_${sectionId}_items`);
+                const section = profileSections.find(s => s.id === sectionId);
+                renderItems(profile, section, items, container);
+                document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+            }
+        };
+
+        window.addGameItem = function(profile, sectionId) {
+            const name = document.getElementById(`${profile}_${sectionId}_name`).value.trim();
+            const link = document.getElementById(`${profile}_${sectionId}_link`).value.trim();
+            if (!name || !link) return;
+            const items = getProfileData(profile, sectionId);
+            items.push({ name: name, link: link });
+            saveProfileData(profile, sectionId, items);
+            const container = document.getElementById(`${profile}_${sectionId}_items`);
+            const section = profileSections.find(s => s.id === sectionId);
+            renderItems(profile, section, items, container);
+            document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+        };
+
+        window.addMovieSongItem = function(profile, sectionId) {
+            const name = document.getElementById(`${profile}_${sectionId}_name`).value.trim();
+            const link = document.getElementById(`${profile}_${sectionId}_link`).value.trim();
+            const reason = document.getElementById(`${profile}_${sectionId}_reason`).value.trim();
+            const posterInput = document.getElementById(`${profile}_${sectionId}_poster`);
+            if (!name) return;
+            const items = getProfileData(profile, sectionId);
+            if (posterInput && posterInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    items.push({ name: name, link: link, reason: reason, poster: e.target.result });
+                    saveProfileData(profile, sectionId, items);
+                    const container = document.getElementById(`${profile}_${sectionId}_items`);
+                    const section = profileSections.find(s => s.id === sectionId);
+                    renderItems(profile, section, items, container);
+                    document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+                };
+                reader.readAsDataURL(posterInput.files[0]);
+            } else {
+                items.push({ name: name, link: link, reason: reason, poster: null });
+                saveProfileData(profile, sectionId, items);
+                const container = document.getElementById(`${profile}_${sectionId}_items`);
+                const section = profileSections.find(s => s.id === sectionId);
+                renderItems(profile, section, items, container);
+                document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+            }
+        };
+
+        window.addMemoryItem = function(profile, sectionId) {
+            const date = document.getElementById(`${profile}_${sectionId}_date`).value;
+            const text = document.getElementById(`${profile}_${sectionId}_text`).value.trim();
+            const fileInput = document.getElementById(`${profile}_${sectionId}_file`);
+            if (!text) return;
+            const items = getProfileData(profile, sectionId);
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    items.push({ date: date, content: text, image: e.target.result });
+                    saveProfileData(profile, sectionId, items);
+                    const container = document.getElementById(`${profile}_${sectionId}_items`);
+                    const section = profileSections.find(s => s.id === sectionId);
+                    renderItems(profile, section, items, container);
+                    document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                items.push({ date: date, content: text, image: null });
+                saveProfileData(profile, sectionId, items);
+                const container = document.getElementById(`${profile}_${sectionId}_items`);
+                const section = profileSections.find(s => s.id === sectionId);
+                renderItems(profile, section, items, container);
+                document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+            }
+        };
+
+        window.sendChatMessage = function(profile) {
+            const input = document.getElementById(`${profile}_chat_input`);
+            const text = input.value.trim();
+            if (!text) return;
+            const messages = getProfileData(profile, 'chat');
+            const sender = (profile === 'mehran') ? 'مهران' : 'ملورین';
+            messages.push({ sender: sender, content: text });
+            saveProfileData(profile, 'chat', messages);
+            const container = document.getElementById(`${profile}_chat_items`);
+            renderChatMessages(profile, messages, container);
+            input.value = '';
+        };
+
+        function renderChatMessages(profile, messages, container) {
+            container.innerHTML = '';
+            messages.forEach((msg, index) => {
+                const div = document.createElement('div');
+                const isOwn = (profile === 'mehran' && item.sender === 'مهران') || (profile === 'melorin' && msg.sender === 'ملورین');
+                div.className = `chat-message ${isOwn ? 'own' : ''}`;
+                div.innerHTML = `
+                    <div class="chat-sender">${msg.sender}</div>
+                    <div>${msg.content}</div>
+                    <button class="chat-delete" onclick="deleteChatMessage('${profile}', ${index})">🗑️</button>
+                `;
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        window.deleteChatMessage = function(profile, index) {
+            if (confirm('آیا مطمئنی؟')) {
+                const messages = getProfileData(profile, 'chat');
+                messages.splice(index, 1);
+                saveProfileData(profile, 'chat', messages);
+                const container = document.getElementById(`${profile}_chat_items`);
+                renderChatMessages(profile, messages, container);
+            }
+        };
+
+        function renderProfile(profile) {
+            const containerId = profile === 'mehran' ? 'mehran-sections' : 'melorin-sections';
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            profileSections.forEach(section => {
+                const items = getProfileData(profile, section.id);
+                const card = document.createElement('div');
+                card.className = 'section-card';
+                card.innerHTML = `
+                    <div class="section-title">${section.title}</div>
+                    <div class="items-container" id="${profile}_${section.id}_items"></div>
+                    ${section.id !== 'chat' ? `<button class="add-btn" onclick="showAddForm('${profile}', ${JSON.stringify(section).replace(/"/g, '&quot;')})">➕ افزودن</button>` : ''}
+                    <div id="${profile}_${section.id}_form" class="add-form"></div>
+                `;
+                container.appendChild(card);
+
+                const itemsContainer = document.getElementById(`${profile}_${section.id}_items`);
+                if (section.id === 'chat') {
+                    renderChatMessages(profile, items, itemsContainer);
+                    const inputArea = document.createElement('div');
+                    inputArea.className = 'chat-input-area';
+                    inputArea.innerHTML = `
+                        <input type="text" id="${profile}_chat_input" placeholder="✏️ پیامت را بنویس...">
+                        <button onclick="sendChatMessage('${profile}')">📤 ارسال</button>
+                    `;
+                    card.appendChild(inputArea);
+                } else if (section.type === 'sharedText') {
+                    renderSharedItems(profile, section, items, itemsContainer);
+                } else {
+                    renderItems(profile, section, items, itemsContainer);
+                }
+            });
+        }
+
+        window.changePassword = function(profile) {
+            const newPass = prompt('رمز جدید را وارد کنید:');
+            if (newPass && newPass.trim() !== '') {
+                if (profile === 'mehran') {
+                    MEHRAN_PASSWORD = newPass.trim();
+                    localStorage.setItem('mehran_password', MEHRAN_PASSWORD);
+                } else {
+                    MELORIN_PASSWORD = newPass.trim();
+                    localStorage.setItem('melorin_password', MELORIN_PASSWORD);
+                }
+                alert('✅ رمز با موفقیت تغییر یافت.');
+            }
+        };
+
+        submitBtn.addEventListener('click', function() {
+            const entered = passwordInput.value.trim();
+            if (entered === MAIN_PASSWORD) {
+                showPage(mainPage);
+                errorDiv.textContent = '';
+                sessionStorage.setItem('loggedIn', 'true');
+            } else {
+                errorDiv.textContent = '❌ اگه یادت نیومد پی ویم بپرس عزیزم';
+                passwordInput.value = '';
+            }
+        });
+
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') submitBtn.click();
+        });
+
+        document.querySelectorAll('.box').forEach(box => {
+            box.addEventListener('click', function() {
+                const profile = this.dataset.profile;
+                if (profile === 'public') {
+                    updatePublicPage();
+                    showPage(publicPage);
+                } else {
+                    pendingProfile = profile;
+                    modalTitle.innerText = (profile === 'mehran') ? 'رمز مهران' : 'رمز ملورین';
+                    modalPassword.value = '';
+                    modalError.textContent = '';
+                    modal.classList.add('active');
+                }
+            });
+        });
+
+        modalSubmit.addEventListener('click', function() {
+            const entered = modalPassword.value.trim();
+            const correct = (pendingProfile === 'mehran' && entered === MEHRAN_PASSWORD) ||
+                            (pendingProfile === 'melorin' && entered === MELORIN_PASSWORD);
+            if (correct) {
+                modal.classList.remove('active');
+                renderProfile(pendingProfile);
+                if (pendingProfile === 'mehran') showPage(mehranPage);
+                else showPage(melorinPage);
+                sessionStorage.setItem('activeProfile', pendingProfile);
+                pendingProfile = null;
+            } else {
+                modalError.textContent = '❌ اگه یادت نیومد پی ویم بپرس عزیزم';
+            }
+        });
+
+        modalCancel.addEventListener('click', () => {
+            modal.classList.remove('active');
+            pendingProfile = null;
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                pendingProfile = null;
+            }
+        });
+
+        window.addEventListener('load', function() {
+            const loggedIn = sessionStorage.getItem('loggedIn');
+            const activeProfile = sessionStorage.getItem('activeProfile');
+            const lastPage = sessionStorage.getItem('currentPage');
+            
+            if (loggedIn === 'true') {
+                if (activeProfile === 'mehran') {
+                    renderProfile('mehran');
+                    showPage(mehranPage);
+                } else if (activeProfile === 'melorin') {
+                    renderProfile('melorin');
+                    showPage(melorinPage);
+                } else if (lastPage === 'public-page') {
+                    updatePublicPage();
+                    showPage(publicPage);
+                } else if (lastPage === 'main-page') {
+                    showPage(mainPage);
+                } else {
+                    showPage(mainPage);
+                }
+            } else {
+                showPage(loginPage);
+                passwordInput.focus();
+            }
+        });
+
+        setInterval(() => {
+            if (publicPage.classList.contains('active')) {
+                updatePublicPage();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
