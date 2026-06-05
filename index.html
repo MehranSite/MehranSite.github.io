@@ -18,6 +18,7 @@
             justify-content: center;
             align-items: center;
             background-color: #1a1a2e;
+            overflow: hidden; /* جلوگیری همیشگی از اسکرول دوتایی بادی */
         }
 
         .page {
@@ -28,9 +29,35 @@
             background-position: center;
             position: relative;
             overflow-y: auto;
+            overflow-x: hidden; /* جلوگیری کامل از هرگونه بیرون‌زدگی افقی */
+            padding: 20px;
+            scroll-behavior: smooth;
         }
         .page.active {
             display: block;
+        }
+
+        /* افکت تاریک‌کننده پس‌زمینه ثابت برای پایداری ابعاد و خوانایی عالی */
+        .page::before {
+            content: '';
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0;
+            background: rgba(15, 15, 30, 0.65);
+            z-index: 1;
+            pointer-events: none; /* عدم تداخل با کلیک‌ها */
+        }
+
+        .page-content-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 100%;
+            padding-bottom: 50px;
         }
 
         #login-page {
@@ -39,14 +66,11 @@
             align-items: center;
             justify-content: center;
         }
+        #login-page::before {
+            background: rgba(0, 0, 0, 0.4);
+        }
         #login-page:not(.active) {
             display: none;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4);
         }
 
         .content {
@@ -56,56 +80,65 @@
             color: white;
             width: 90%;
             max-width: 400px;
-            padding: 30px 20px;
-            background: #2d2d4a;
-            border-radius: 40px;
-            border: 2px solid #6c3483;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 40px 25px;
+            background: rgba(45, 45, 74, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 2px solid #8e44ad;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 25px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            color: #fff;
         }
 
         #password-input {
             width: 100%;
-            padding: 14px 20px;
-            border: none;
+            padding: 15px 20px;
+            border: 2px solid transparent;
             border-radius: 50px;
             font-size: 1.1rem;
             text-align: center;
-            background: #ecf0f1;
+            background: rgba(236, 240, 241, 0.9);
             outline: none;
             color: #2c3e50;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        #password-input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
         }
 
         #submit-btn {
             width: 100%;
-            padding: 14px 20px;
+            padding: 15px 20px;
             border: none;
             border-radius: 50px;
             background-color: #ff6b6b;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
-            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(255,107,107,0.4);
         }
 
         #submit-btn:hover {
             background-color: #ff4757;
+            transform: translateY(-2px);
         }
 
         .error-message {
             margin-top: 15px;
-            color: #ffcccc;
+            color: #ff8a8a;
             font-size: 1rem;
-            min-height: 40px;
+            min-height: 25px;
             font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
         #main-page {
@@ -113,7 +146,7 @@
             background-size: cover;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            display: none;
         }
         #main-page.active {
             display: flex;
@@ -123,64 +156,89 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
-            max-width: 1200px;
+            align-items: center;
+            gap: 25px;
+            max-width: 1000px;
             width: 100%;
+            z-index: 10;
+            padding: 20px;
         }
 
         .box {
-            flex: 1 1 250px;
-            height: 300px;
-            border-radius: 20px;
+            flex: 1 1 280px;
+            max-width: 320px;
+            height: 250px;
+            border-radius: 25px;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: bold;
             color: white;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            background: #2d2d4a;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            background: rgba(45, 45, 74, 0.85);
+            backdrop-filter: blur(5px);
             border: 3px solid #9b59b6;
+            padding: 20px;
         }
 
         .box:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 35px rgba(155, 89, 182, 0.4);
+            border-color: #f1c40f;
         }
 
+        /* شخصی‌سازی باکس‌ها */
+        .box[data-profile="mehran"] { border-color: #3498db; }
+        .box[data-profile="public"] { border-color: #2ecc71; }
+        .box[data-profile="melorin"] { border-color: #9b59b6; }
+
+        /* استایل مدال‌های سفارشی و شیک */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(8px);
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            padding: 15px;
         }
         .modal.active { display: flex; }
 
         .modal-content {
             background: #2d2d4a;
-            padding: 30px 25px;
-            border-radius: 40px;
+            padding: 35px 25px;
+            border-radius: 30px;
             text-align: center;
-            max-width: 350px;
-            width: 90%;
+            max-width: 400px;
+            width: 100%;
             direction: rtl;
-            border: 2px solid #9b59b6;
+            border: 3px solid #9b59b6;
             color: white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            position: relative;
+            animation: modalFade 0.3s ease-out;
+        }
+
+        @keyframes modalFade {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .modal-content h2 {
             margin-bottom: 20px;
             color: #f1c40f;
             font-size: 1.8rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
-        .modal-content input {
+        .modal-content input[type="password"],
+        .modal-content input[type="text"] {
             width: 100%;
             padding: 15px;
             margin-bottom: 20px;
@@ -190,100 +248,102 @@
             text-align: center;
             background: #ecf0f1;
             color: #2c3e50;
+            outline: none;
         }
 
         .modal-content button {
-            padding: 12px 30px;
+            padding: 12px 25px;
             border: none;
             border-radius: 50px;
             background: #9b59b6;
             color: white;
             font-size: 1.1rem;
+            font-weight: bold;
             cursor: pointer;
             margin: 5px;
-            border: 1px solid #8e44ad;
+            transition: all 0.2s;
         }
-
+        .modal-content button:hover {
+            transform: scale(1.05);
+        }
         .modal-content button.cancel { background: #e74c3c; }
 
         .modal-error {
             color: #ff6b6b;
             margin-top: 15px;
             font-size: 1rem;
+            font-weight: bold;
         }
 
         .inner-page {
             background-size: cover;
             background-position: center;
+            background-attachment: fixed; /* نمایش جذاب و ثابت تصویر زمینه */
             color: white;
-            padding: 20px;
         }
 
-        #public-page {
-            background-image: url('pic3.jpg');
-        }
-        #mehran-page {
-            background-image: url('pic5.jpg');
-        }
-        #melorin-page {
-            background-image: url('pic4.jpg');
-        }
+        #public-page { background-image: url('pic3.jpg'); }
+        #mehran-page { background-image: url('pic5.jpg'); }
+        #melorin-page { background-image: url('pic4.jpg'); }
 
         .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #2d2d4a;
-            padding: 12px 20px;
-            border-radius: 60px;
+            background: rgba(45, 45, 74, 0.9);
+            backdrop-filter: blur(5px);
+            padding: 15px 25px;
+            border-radius: 30px;
             margin-bottom: 30px;
             border: 2px solid #9b59b6;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            flex-wrap: wrap;
-            gap: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            gap: 15px;
         }
 
         .page-header h2 {
             font-size: 1.8rem;
             margin: 0;
             color: #f1c40f;
-            text-shadow: 0 0 5px rgba(241,196,15,0.5);
-            flex: 1 1 auto;
+            text-shadow: 0 0 8px rgba(241,196,15,0.4);
             text-align: center;
+            flex-grow: 1;
         }
 
         .home-btn {
             background: #34495e;
             border: none;
             color: white;
-            padding: 10px 20px;
-            border-radius: 40px;
+            padding: 12px 24px;
+            border-radius: 50px;
             font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
-            border: 1px solid #9b59b6;
-            transition: 0.3s;
+            border: 2px solid #9b59b6;
+            transition: all 0.3s;
             white-space: nowrap;
         }
 
         .home-btn:hover {
-            background: #4a6fa5;
+            background: #1e272e;
             border-color: #f1c40f;
+            transform: scale(1.05);
         }
 
         .public-container {
             max-width: 800px;
             margin: 0 auto;
-            background: #2d2d4a;
-            border-radius: 50px;
+            background: rgba(45, 45, 74, 0.9);
+            border-radius: 40px;
             padding: 30px;
             border: 2px solid #9b59b6;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
 
+        /* تراز کردن تایمر */
         .timer-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 15px;
             direction: ltr;
             margin-bottom: 30px;
         }
@@ -291,55 +351,61 @@
         .timer-item {
             text-align: center;
             background: #1e1e3f;
-            border-radius: 30px;
-            padding: 15px 5px;
+            border-radius: 20px;
+            padding: 15px 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            border: 1px solid #9b59b6;
+            border: 2px solid #9b59b6;
         }
 
         .timer-label {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #f39c12;
             margin-bottom: 8px;
+            font-weight: bold;
         }
 
         .timer-value {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            font-family: 'Times New Roman', monospace;
+            font-family: 'Courier New', monospace;
             background: #0f0f1f;
-            padding: 5px;
-            border-radius: 20px;
+            padding: 8px;
+            border-radius: 15px;
             color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
 
         .special-reason-box {
             background: #4a235a;
             border: 2px solid #9b59b6;
-            border-radius: 60px;
+            border-radius: 30px;
             padding: 15px 25px;
             margin-bottom: 20px;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: bold;
             text-align: center;
             color: #f1c40f;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
 
         .reason-item {
             background: #2c3e50;
-            margin: 10px 0;
+            margin: 12px 0;
             padding: 15px 25px;
-            border-radius: 50px;
-            font-size: 1rem;
-            border-right: 5px solid #ff6b6b;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+            border-radius: 25px;
+            font-size: 1.1rem;
+            border-right: 6px solid #ff6b6b;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             color: white;
+            line-height: 1.6;
+            transition: all 0.3s;
         }
         .reason-item:hover {
             background: #34495e;
+            transform: translateX(-5px);
         }
 
+        /* شبکه سکشن‌های پروفایل اختصاصی - اصلاح ستون‌ها برای دسکتاپ */
         .sections-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -348,53 +414,69 @@
         }
 
         .section-card {
-            background: #2d2d4a;
-            border-radius: 40px;
-            padding: 20px;
+            background: rgba(45, 45, 74, 0.9);
+            border-radius: 30px;
+            padding: 22px;
             border: 2px solid;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-width: 0; /* حیاتی برای پیشگیری از اورفلو کارت‌های درونی گرید */
         }
-        .section-card:nth-child(1) { border-color: #9b59b6; }
-        .section-card:nth-child(2) { border-color: #3498db; }
-        .section-card:nth-child(3) { border-color: #2ecc71; }
-        .section-card:nth-child(4) { border-color: #f39c12; }
-        .section-card:nth-child(5) { border-color: #e74c3c; }
-        .section-card:nth-child(6) { border-color: #1abc9c; }
-        .section-card:nth-child(7) { border-color: #e67e22; }
-        .section-card:nth-child(8) { border-color: #9b59b6; }
-        .section-card:nth-child(9) { border-color: #3498db; }
-        .section-card:nth-child(10) { border-color: #2ecc71; }
-        .section-card:nth-child(11) { border-color: #f39c12; }
-        .section-card:nth-child(12) { border-color: #e74c3c; }
-        .section-card:nth-child(13) { border-color: #1abc9c; }
+
+        /* تخصیص رنگ های جذاب و متنوع برای کارت‌ها */
+        .section-card:nth-child(4n+1) { border-color: #9b59b6; }
+        .section-card:nth-child(4n+2) { border-color: #3498db; }
+        .section-card:nth-child(4n+3) { border-color: #2ecc71; }
+        .section-card:nth-child(4n+4) { border-color: #e67e22; }
 
         .section-title {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
+            font-weight: bold;
             margin-bottom: 15px;
-            border-bottom: 2px solid rgba(255,255,255,0.3);
-            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
             color: #f1c40f;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
         .items-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-height: 300px;
+            gap: 12px;
+            max-height: 350px;
             overflow-y: auto;
-            padding-left: 5px;
             background: #1e1e3f;
-            border-radius: 30px;
+            border-radius: 20px;
             padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* استایل سفارشی اسکرول بار */
+        .items-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .items-container::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        .items-container::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
         }
 
         .item-card {
             background: #2c3e50;
-            border-radius: 25px;
-            padding: 12px;
+            border-radius: 18px;
+            padding: 15px;
             position: relative;
-            border-left: 3px solid #ff6b6b;
+            border-right: 4px solid #ff6b6b;
             color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         .item-card:hover {
             background: #34495e;
@@ -402,119 +484,147 @@
 
         .item-card img, .item-card video {
             max-width: 100%;
-            border-radius: 20px;
-            margin-top: 8px;
+            height: auto;
+            border-radius: 12px;
+            margin-top: 10px;
+            display: block;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .item-reason {
             font-size: 0.9rem;
-            color: #ddd;
-            margin-top: 5px;
+            color: #ffbe76;
+            margin-top: 8px;
             font-style: italic;
             background: #1a1a2e;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            border-right: 2px solid #f1c40f;
         }
 
         .delete-btn {
             position: absolute;
-            top: 8px;
-            left: 8px;
+            top: 10px;
+            left: 10px;
             background: #e74c3c;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 1rem;
+            width: 28px;
+            height: 28px;
+            font-size: 0.9rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.3s;
+            transition: all 0.2s;
             border: 1px solid #c0392b;
+            z-index: 5;
         }
         .delete-btn:hover {
             background: #c0392b;
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
 
         .add-btn {
-            background: #34495e;
+            background: rgba(52, 73, 94, 0.8);
             border: 2px dashed #9b59b6;
             color: white;
             padding: 12px;
-            border-radius: 40px;
+            border-radius: 20px;
             width: 100%;
             font-size: 1.1rem;
-            margin-top: 15px;
+            font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s;
         }
         .add-btn:hover {
             background: #4a6fa5;
             border-color: #f1c40f;
         }
 
+        /* فرم‌ها */
         .add-form {
             background: #1e1e3f;
-            border-radius: 30px;
+            border-radius: 20px;
             padding: 15px;
             margin-top: 15px;
             display: none;
-            border: 1px solid #9b59b6;
+            border: 2px solid #9b59b6;
         }
         .add-form.active { display: block; }
 
         .add-form input, .add-form textarea, .add-form select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px;
             margin: 8px 0;
-            border: none;
-            border-radius: 30px;
+            border: 2px solid transparent;
+            border-radius: 15px;
             font-size: 0.95rem;
             background: #ecf0f1;
             color: #2c3e50;
+            outline: none;
+            transition: 0.3s;
+        }
+        .add-form input:focus, .add-form textarea:focus {
+            border-color: #9b59b6;
+        }
+
+        .add-form label {
+            font-size: 0.9rem;
+            color: #f1c40f;
+            margin-top: 5px;
+            display: block;
         }
 
         .add-form button {
-            padding: 8px 18px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 30px;
+            border-radius: 50px;
             background: #2ecc71;
             color: white;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 10px;
             margin-left: 8px;
             border: 1px solid #27ae60;
+            transition: 0.2s;
         }
+        .add-form button:hover { transform: scale(1.05); }
         .add-form button.cancel { background: #e74c3c; border-color: #c0392b; }
 
+        /* چت روم شخصی */
         .chat-message {
             background: #2980b9;
-            border-radius: 25px;
-            padding: 8px 15px;
-            margin: 5px 0;
-            max-width: 80%;
+            border-radius: 18px;
+            border-top-right-radius: 2px;
+            padding: 10px 15px;
+            margin: 8px 0;
+            max-width: 85%;
             align-self: flex-start;
             position: relative;
             border: 1px solid #3498db;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         .chat-message.own {
             background: #8e44ad;
+            border-radius: 18px;
+            border-top-left-radius: 2px;
             align-self: flex-end;
             border-color: #9b59b6;
         }
         .chat-sender {
             font-size: 0.8rem;
-            opacity: 0.8;
-            margin-bottom: 4px;
+            opacity: 0.9;
+            margin-bottom: 5px;
             color: #f1c40f;
+            font-weight: bold;
         }
         .chat-delete {
             position: absolute;
-            top: -5px;
-            left: -5px;
+            top: -6px;
+            left: -6px;
             background: #e74c3c;
             color: white;
             border: none;
@@ -527,83 +637,126 @@
             align-items: center;
             justify-content: center;
             border: 1px solid #c0392b;
+            transition: 0.2s;
         }
+        .chat-delete:hover { transform: scale(1.2); }
 
-        .chat-input-area {
-            display: flex;
-            gap: 8px;
-            margin-top: 15px;
-        }
-        .chat-input-area input {
-            flex: 1;
-            padding: 6px;
-            border-radius: 40px;
-            border: none;
-            background: #ecf0f1;
-            color: #2c3e50;
-        }
-        .chat-input-area button {
-            padding: 12px 20px;
-            border-radius: 40px;
-            border: none;
-            background: #f39c12;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            border: 1px solid #e67e22;
-        }
-        .chat-input-area button:hover {
-            background: #e67e22;
-        }
+		.chat-input-area {
+		    display: flex;
+		    gap: 8px;
+		    margin-top: 15px;
+		    width: 100%;
+		}
+		.chat-input-area input {
+		    flex: 1;
+		    padding: 12px 15px;
+		    border-radius: 50px;
+		    border: 2px solid #9b59b6;
+		    background: #ecf0f1;
+		    color: #2c3e50;
+		    outline: none;
+		    font-size: 0.95rem;
+		    min-width: 0; /* جلوگیری از بیرون زدگی اینپوت در موبایل */
+		}	
+		.chat-input-area button {
+		    padding: 12px 20px;
+		    border-radius: 50px;
+		    border: none;
+		    background: #f39c12;
+		    color: white;
+		    font-weight: bold;
+		    cursor: pointer;
+		    transition: all 0.3s;
+		    border: 1px solid #e67e22;
+		    white-space: nowrap; /* جلوگیری از شکستن متن دکمه */
+		}		
+		.chat-input-area button:hover {
+		    background: #e67e22;
+		    transform: scale(1.03);
+		}
 
         .game-item {
             background: #2c3e50;
-            padding: 10px;
-            border-radius: 20px;
+            padding: 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .game-item a {
             color: #f1c40f;
             text-decoration: none;
+            font-weight: bold;
+        }
+        .game-item a:hover {
+            text-decoration: underline;
         }
 
         .change-password {
             text-align: center;
-            margin-top: 30px;
-            padding: 15px;
-            background: #2d2d4a;
-            border-radius: 50px;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(45, 45, 74, 0.85);
+            border-radius: 30px;
             cursor: pointer;
             font-size: 1.2rem;
+            font-weight: bold;
             border: 2px dashed #9b59b6;
-            transition: 0.3s;
+            transition: all 0.3s;
             color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         .change-password:hover {
             background: #4a235a;
             border-color: #f1c40f;
+            transform: translateY(-3px);
         }
 
-        @media (max-width: 90000px) {
-            h1 { font-size: 2rem; }
-            .box { height: 180px; font-size: 1.4rem; }
+        /* اصلاح هدر کارت اطلاعات شخصی */
+        .info-card-pic {
+            width: 110px;
+            height: 110px;
+            border-radius: 50% !important;
+            object-fit: cover;
+            margin: 0 auto 15px auto !important;
+            border: 3px solid #f1c40f;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        /* رسپانسیو و بهینه‌سازی شده برای موبایل */
+        @media (max-width: 768px) {
+            /* حذف لغو اسکرول بادی در موبایل برای رفع تداخل پهنای صفحه */
+            .page {
+                padding: 15px 12px; /* تنظیم پدینگ نرم برای صفحات موبایل */
+            }
+            h1 { font-size: 1.8rem; }
+            .box { height: 180px; font-size: 1.3rem; }
+            .page-header {
+                flex-direction: column;
+                padding: 15px;
+                border-radius: 20px;
+            }
             .page-header h2 { font-size: 1.3rem; }
-            .timer-value { font-size: 1.5rem; }
-            .timer-label { font-size: 1rem; }
-            .section-title { font-size: 1.3rem; }
-            .item-card { font-size: 0.9rem; padding: 10px; }
+            .home-btn { width: 100%; text-align: center; padding: 10px; }
+            .timer-grid { gap: 8px; }
+            .timer-value { font-size: 1.4rem; padding: 5px; }
+            .timer-label { font-size: 0.9rem; }
+            .section-title { font-size: 1.2rem; }
+            .item-card { font-size: 0.95rem; padding: 12px; }
             .add-btn { font-size: 1rem; padding: 10px; }
-            .sections-grid { gap: 15px; }
-            .section-card { padding: 15px; }
-            .home-btn { padding: 8px 12px; font-size: 0.9rem; }
+            .sections-grid { 
+                grid-template-columns: 1fr; /* تبدیل منعطف به تک ستونه روان بدون گپ فریز شده */
+                gap: 20px; 
+            }
+            .section-card { padding: 18px 15px; }
+            .content { padding: 30px 15px; }
         }
     </style>
 </head>
 <body>
+    <!-- مودال پاپ‌آپ رمز پروفایل‌ها -->
     <div id="profile-modal" class="modal">
         <div class="modal-content">
             <h2 id="modal-title">رمز پروفایل</h2>
-            <input type="password" id="modal-password" placeholder="رمز را وارد کنید">
+            <input type="password" id="modal-password" placeholder="رمز عبور را وارد کنید" autocomplete="off">
             <div>
                 <button id="modal-submit">✅ تایید</button>
                 <button class="cancel" id="modal-cancel">❌ انصراف</button>
@@ -612,64 +765,88 @@
         </div>
     </div>
 
+    <!-- مودال اختصاصی تایید حذف و نوتیفیکیشن‌ها بجای alert و confirm پیش‌فرض مرورگر -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content" style="border-color: #e74c3c; max-width: 350px;">
+            <h2 style="color: #e74c3c; font-size: 1.5rem;">⚠️ تایید عملیات</h2>
+            <p id="confirm-msg" style="margin-bottom: 20px; line-height: 1.6;">آیا از حذف این آیتم مطمئن هستید؟</p>
+            <div>
+                <button id="confirm-yes" style="background: #e74c3c;">🗑️ بله، حذف شود</button>
+                <button id="confirm-no" class="cancel">لغو</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحه لاگین -->
     <div id="login-page" class="page active">
-        <div class="overlay"></div>
         <div class="content">
             <h1>✨ خوش اومدی عزیزم ✨</h1>
-            <input type="password" id="password-input" placeholder="رمز عبور را وارد کن" maxlength="20">
+            <input type="password" id="password-input" placeholder="رمز عبور مشترک را وارد کن" maxlength="20">
             <button id="submit-btn">💫 تایید</button>
             <div id="error-message" class="error-message"></div>
         </div>
     </div>
 
+    <!-- صفحه اصلی بعد از لاگین -->
     <div id="main-page" class="page">
         <div class="boxes-container">
             <div class="box" data-profile="mehran">💙 پروفایل مهران</div>
-            <div class="box" data-profile="public">💚 عمومی</div>
+            <div class="box" data-profile="public">💚 صفحه عمومی مشترک</div>
             <div class="box" data-profile="melorin">💜 پروفایل ملورین</div>
         </div>
     </div>
 
+    <!-- صفحه عمومی -->
     <div id="public-page" class="page inner-page">
-        <div class="page-header">
-            <button class="home-btn" onclick="goToMainPage()">🏠 بازگشت به خانه</button>
-            <h2>✨ صفحه عمومی ✨</h2>
-        </div>
-        <div class="public-container">
-            <div class="timer-grid">
-                <div class="timer-item"><div class="timer-label">روز</div><div class="timer-value" id="timer-days">0</div></div>
-                <div class="timer-item"><div class="timer-label">ساعت</div><div class="timer-value" id="timer-hours">0</div></div>
-                <div class="timer-item"><div class="timer-label">دقیقه</div><div class="timer-value" id="timer-minutes">0</div></div>
-                <div class="timer-item"><div class="timer-label">ثانیه</div><div class="timer-value" id="timer-seconds">0</div></div>
+        <div class="page-content-wrapper">
+            <div class="page-header">
+                <button class="home-btn" onclick="goToMainPage()">🏠 بازگشت به خانه</button>
+                <h2>✨ صفحه عمومی ما ✨</h2>
             </div>
-            <div class="special-reason-box">❤️چرا عاشقتم؟❤️</div>
-            <div id="reasons-list"></div>
+            <div class="public-container">
+                <div class="timer-grid">
+                    <div class="timer-item"><div class="timer-label">روز</div><div class="timer-value" id="timer-days">0</div></div>
+                    <div class="timer-item"><div class="timer-label">ساعت</div><div class="timer-value" id="timer-hours">0</div></div>
+                    <div class="timer-item"><div class="timer-label">دقیقه</div><div class="timer-value" id="timer-minutes">0</div></div>
+                    <div class="timer-item"><div class="timer-label">ثانیه</div><div class="timer-value" id="timer-seconds">0</div></div>
+                </div>
+                <div class="special-reason-box">❤️ چرا عاشقتم؟ ❤️</div>
+                <div id="reasons-list"></div>
+            </div>
         </div>
     </div>
 
+    <!-- پروفایل مهران -->
     <div id="mehran-page" class="page inner-page">
-        <div class="page-header">
-            <button class="home-btn" onclick="goToMainPage()">🏠 بازگشت به خانه</button>
-            <h2>💙 پروفایل مهران</h2>
+        <div class="page-content-wrapper">
+            <div class="page-header">
+                <button class="home-btn" onclick="goToMainPage()">🏠 بازگشت به خانه</button>
+                <h2>💙 پروفایل مهران</h2>
+            </div>
+            <div class="sections-grid" id="mehran-sections"></div>
+            <div class="change-password" onclick="changePassword('mehran')">🔑 تغییر رمز عبور مهران</div>
         </div>
-        <div class="sections-grid" id="mehran-sections"></div>
-        <div class="change-password" onclick="changePassword('mehran')">🔑 میخوای رمزت رو عوض کنی؟</div>
     </div>
 
+    <!-- پروفایل ملورین -->
     <div id="melorin-page" class="page inner-page">
-        <div class="page-header">
-            <button class="home-btn" onclick="goToMainPage()">🏠 بازگشت به خانه</button>
-            <h2>💜 پروفایل ملورین</h2>
+        <div class="page-content-wrapper">
+            <div class="page-header">
+                <button class="home-btn" onclick="goToMainPage()">🏠 بازگشت به خانه</button>
+                <h2>💜 پروفایل ملورین</h2>
+            </div>
+            <div class="sections-grid" id="melorin-sections"></div>
+            <div class="change-password" onclick="changePassword('melorin')">🔑 تغییر رمز عبور ملورین</div>
         </div>
-        <div class="sections-grid" id="melorin-sections"></div>
-        <div class="change-password" onclick="changePassword('melorin')">🔑 میخوای رمزت رو عوض کنی؟</div>
     </div>
 
     <script>
+        // تعریف و لود کردن رمزها
         let MEHRAN_PASSWORD = localStorage.getItem('mehran_password') || "MEHRAN_J";
         let MELORIN_PASSWORD = localStorage.getItem('melorin_password') || "MELI_MEOW";
         const MAIN_PASSWORD = "M&MBF";
 
+        // تاریخ شروع رابطه عاشقانه (سال، ماه از صفر شروع می‌شود یعنی ۵ یعنی ژوئن، روز، ساعت، دقیقه...)
         const START_DATE = new Date(2026, 5, 5, 0, 0, 0);
         
         const reasonsList = [
@@ -702,6 +879,7 @@
             "چون بعد از آشنایی با تو حس میکنم هیچوقت هیچ دختری دیگه قرار نیست به چشمم بیاد"
         ];
 
+        // المان‌های DOM
         const loginPage = document.getElementById('login-page');
         const mainPage = document.getElementById('main-page');
         const passwordInput = document.getElementById('password-input');
@@ -715,6 +893,11 @@
         const modalCancel = document.getElementById('modal-cancel');
         const modalError = document.getElementById('modal-error');
 
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmMsg = document.getElementById('confirm-msg');
+        const confirmYes = document.getElementById('confirm-yes');
+        const confirmNo = document.getElementById('confirm-no');
+
         const publicPage = document.getElementById('public-page');
         const mehranPage = document.getElementById('mehran-page');
         const melorinPage = document.getElementById('melorin-page');
@@ -726,11 +909,32 @@
         const reasonsContainer = document.getElementById('reasons-list');
 
         let pendingProfile = null;
+        let confirmCallback = null;
+
+        // تابع کمکی برای تایید حذف‌های شیک و غیربلاک‌کننده
+        function customConfirm(message, callback) {
+            confirmMsg.innerText = message;
+            confirmModal.classList.add('active');
+            confirmCallback = callback;
+        }
+
+        confirmYes.onclick = function() {
+            confirmModal.classList.remove('active');
+            if (confirmCallback) confirmCallback();
+            confirmCallback = null;
+        };
+
+        confirmNo.onclick = function() {
+            confirmModal.classList.remove('active');
+            confirmCallback = null;
+        };
 
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             page.classList.add('active');
             sessionStorage.setItem('currentPage', page.id);
+            // اسکرول کردن به بالا هنگام لود شدن صفحه جدید
+            page.scrollTop = 0;
         }
 
         function goToMainPage() {
@@ -738,6 +942,7 @@
             sessionStorage.removeItem('activeProfile');
         }
 
+        // محاسبه دقیق زمان گذشته
         function getTimeDifference() {
             const now = new Date();
             const diffMs = now - START_DATE;
@@ -758,38 +963,29 @@
             timerSeconds.textContent = seconds;
 
             reasonsContainer.innerHTML = '';
+            // نمایش دلایل بر اساس تعداد روز گذشته
             for (let i = 0; i < Math.min(days, reasonsList.length); i++) {
                 const div = document.createElement('div');
                 div.className = 'reason-item';
-                div.innerText = reasonsList[i];
+                div.innerText = `${i + 1}. ${reasonsList[i]}`;
                 reasonsContainer.appendChild(div);
             }
             if (days === 0) {
                 reasonsContainer.innerHTML = '<div class="reason-item">هنوز روزی نگذشته عزیزم. به ازای هر روزی که بگذره یه دلیل جدید اینجا میبینی پس از فردا به اینجا سر بزن. خیلی دوستت دارم💜</div>';
-            }
-            if (days > reasonsList.length) {
+            } else if (days > reasonsList.length) {
                 const extra = document.createElement('div');
                 extra.className = 'reason-item';
-                extra.innerText = '... و باز هم دلایل بیشتر که بعداً اضافه می‌کنم ✨';
+                extra.style.borderColor = '#f1c40f';
+                extra.innerText = '... و بی نهایت دلیل دیگه وجود داره که با تک تک ضربان قلبم بهشون پایبندم ✨';
                 reasonsContainer.appendChild(extra);
             }
         }
 
+        // اصلاح و ایمن‌سازی دیتابیس لوکال
         function getProfileData(profile, section) {
-            if (section === 'chat') {
-                const data = localStorage.getItem('global_chat');
-                return data ? JSON.parse(data) : [];
-            }
-            if (section === 'letters') {
-                const data = localStorage.getItem('global_letters');
-                return data ? JSON.parse(data) : [];
-            }
-            if (section === 'dreams') {
-                const data = localStorage.getItem('global_dreams');
-                return data ? JSON.parse(data) : [];
-            }
-            if (section === 'memories') {
-                const data = localStorage.getItem('global_memories');
+            // تفکیک دقیق داده‌های گلوبال/مشترک و داده‌های اختصاصی پروفایل
+            if (['chat', 'letters', 'dreams', 'memories'].includes(section)) {
+                const data = localStorage.getItem(`global_${section}`);
                 return data ? JSON.parse(data) : [];
             }
             const key = `${profile}_${section}`;
@@ -798,43 +994,38 @@
         }
 
         function saveProfileData(profile, section, data) {
-            if (section === 'chat') {
-                localStorage.setItem('global_chat', JSON.stringify(data));
-            } else if (section === 'letters') {
-                localStorage.setItem('global_letters', JSON.stringify(data));
-            } else if (section === 'dreams') {
-                localStorage.setItem('global_dreams', JSON.stringify(data));
-            } else if (section === 'memories') {
-                localStorage.setItem('global_memories', JSON.stringify(data));
+            if (['chat', 'letters', 'dreams', 'memories'].includes(section)) {
+                localStorage.setItem(`global_${section}`, JSON.stringify(data));
             } else {
                 const key = `${profile}_${section}`;
                 localStorage.setItem(key, JSON.stringify(data));
             }
         }
 
+        // ساختار کارت‌های پروفایل
         const profileSections = [
-            { 
-                id: 'info', 
-                title: '📋 اطلاعات من', 
-                type: 'info', 
-                hasReason: false, 
-                addType: 'info' 
-            },
-            { id: 'pics', title: '📸 عکس‌ها و کلیپایی که دوست دارم', type: 'media', hasReason: true, accept: 'image/jpeg,image/png,video/mp4', addType: 'file' },
-            { id: 'movies', title: '🎬 فیلم‌ها و سریال‌های مورد علاقه', type: 'movie', hasReason: true, addType: 'movie' },
-            { id: 'songs', title: '🎵 آهنگ‌های مورد علاقه', type: 'song', hasReason: true, addType: 'song' },
-            { id: 'places', title: '📍 مکان‌های مورد علاقه', type: 'place', hasReason: true, addType: 'location' },
-            { id: 'notes', title: '📝 یادداشت‌های من', type: 'text', hasReason: false, addType: 'text' },
-            { id: 'other', title: '🎨 سایر علاقه‌مندی‌ها', type: 'media', hasReason: true, accept: '*/*', addType: 'file' },
+            { id: 'info', title: '📋 بیوگرافی و اطلاعات من', type: 'info', hasReason: false, addType: 'info' },
+            { id: 'pics', title: '📸 عکس‌ها و فیلم‌های مورد علاقه', type: 'media', hasReason: true, accept: 'image/*,video/*', addType: 'file' },
+            { id: 'movies', title: '🎬 فیلم‌ها و سریال‌های پیشنهادی', type: 'movie', hasReason: true, addType: 'movie' },
+            { id: 'songs', title: '🎵 آهنگ‌های پیشنهادی و خاص', type: 'song', hasReason: true, addType: 'song' },
+            { id: 'places', title: '📍 جاهایی که باید بریم', type: 'place', hasReason: true, addType: 'location' },
+            { id: 'notes', title: '📝 یادداشت‌های شخصی من', type: 'text', hasReason: false, addType: 'text' },
+            { id: 'other', title: '🎨 علاقه‌مندی‌ها و متفرقه‌ها', type: 'media', hasReason: true, accept: '*/*', addType: 'file' },
             { id: 'games', title: '🎮 بازی‌هایی که دوست دارم باهم تجربه کنیم', type: 'game', hasReason: false, addType: 'game' },
-            { id: 'letters', title: '💌 نامه و حرف‌های عاشقانه', type: 'sharedText', hasReason: false, addType: 'text' },
-            { id: 'dreams', title: '✨ کارایی که دوست دارم باهم انجام بدیم', type: 'sharedText', hasReason: false, addType: 'text' },
-            { id: 'memories', title: '📖 خاطرات مشترک', type: 'memory', hasReason: true, addType: 'memory' },
-            { id: 'chat', title: '💬 چت با عشقم', type: 'chat', hasReason: false }
+            { id: 'letters', title: '💌 نامه‌ها و ناگفته‌های عاشقانه', type: 'sharedText', hasReason: false, addType: 'text' },
+            { id: 'dreams', title: '✨ رویاهای مشترک و آرزوها', type: 'sharedText', hasReason: false, addType: 'text' },
+            { id: 'memories', title: '📖 دفترچه خاطرات ما', type: 'memory', hasReason: true, addType: 'memory' },
+            { id: 'chat', title: '💬 صندوق پیام‌های سریع ما', type: 'chat', hasReason: false }
         ];
         
+        // اصلاح باگ‌های کلیدی رندر آیتم‌ها
         function renderItems(profile, section, items, container) {
             container.innerHTML = '';
+            if (items.length === 0) {
+                container.innerHTML = '<div style="text-align:center; opacity:0.6; font-size:0.9rem; padding: 20px 0;">آیتمی اضافه نشده است</div>';
+                return;
+            }
+
             items.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'item-card';
@@ -842,177 +1033,202 @@
                 if (section.type === 'info') {
                     let html = '';
                     if (item.profilePic) {
-                        html += `<img src="${item.profilePic}" style="max-width:100px; border-radius:50%; margin-bottom:10px;">`;
+                        html += `<img src="${item.profilePic}" class="info-card-pic">`;
                     }
-                    if (item.name) html += `<div><strong>نام:</strong> ${item.name}</div>`;
-                    if (item.birth) html += `<div><strong>تاریخ تولد:</strong> ${item.birth}</div>`;
-                    if (item.birthPlace) html += `<div><strong>محل تولد:</strong> ${item.birthPlace}</div>`;
-                    if (item.livingPlace) html += `<div><strong>محل زندگی:</strong> ${item.livingPlace}</div>`;
-                    if (item.favoriteFood) html += `<div><strong>خوراکی مورد علاقه:</strong> ${item.favoriteFood}</div>`;
-                    if (item.favoriteSport) html += `<div><strong>ورزش مورد علاقه:</strong> ${item.favoriteSport}</div>`;
-                    if (item.favoriteColor) html += `<div><strong>رنگ مورد علاقه:</strong> ${item.favoriteColor}</div>`;
-                    if (item.favoriteMovie) html += `<div><strong>فیلم مورد علاقه:</strong> ${item.favoriteMovie}</div>`;
-                    if (item.favoriteMusic) html += `<div><strong>آهنگ مورد علاقه:</strong> ${item.favoriteMusic}</div>`;
-                    if (item.favoriteBook) html += `<div><strong>کتاب مورد علاقه:</strong> ${item.favoriteBook}</div>`;
-                    if (item.favoriteAnimal) html += `<div><strong>حیوان مورد علاقه:</strong> ${item.favoriteAnimal}</div>`;
-                    if (item.favoriteSeason) html += `<div><strong>فصل مورد علاقه:</strong> ${item.favoriteSeason}</div>`;
-                    if (item.favoriteFlower) html += `<div><strong>گل مورد علاقه:</strong> ${item.favoriteFlower}</div>`;
-                    if (item.favoriteEntertainment) html += `<div><strong>تفریح مورد علاقه:</strong> ${item.favoriteEntertainment}</div>`;
-                    if (item.extra) html += `<div class="extra-info"><strong>✨ یه چیز دیگه:</strong> ${item.extra}</div>`;
+                    if (item.name) html += `<div><strong>✨ نام و نام خانوادگی:</strong> ${item.name}</div>`;
+                    if (item.birth) html += `<div><strong>📅 تاریخ تولد:</strong> ${item.birth}</div>`;
+                    if (item.birthPlace) html += `<div><strong>🌍 محل تولد:</strong> ${item.birthPlace}</div>`;
+                    if (item.livingPlace) html += `<div><strong>🏡 محل سکونت فعلی:</strong> ${item.livingPlace}</div>`;
+                    if (item.favoriteFood) html += `<div><strong>🍕 خوراکی مورد علاقه:</strong> ${item.favoriteFood}</div>`;
+                    if (item.favoriteSport) html += `<div><strong>⚽ ورزش مورد علاقه:</strong> ${item.favoriteSport}</div>`;
+                    if (item.favoriteColor) html += `<div><strong>🎨 رنگ مورد علاقه:</strong> ${item.favoriteColor}</div>`;
+                    if (item.favoriteMovie) html += `<div><strong>🎬 فیلم مورد علاقه:</strong> ${item.favoriteMovie}</div>`;
+                    if (item.favoriteMusic) html += `<div><strong>🎵 موزیک مورد علاقه:</strong> ${item.favoriteMusic}</div>`;
+                    if (item.favoriteBook) html += `<div><strong>📚 کتاب مورد علاقه:</strong> ${item.favoriteBook}</div>`;
+                    if (item.favoriteAnimal) html += `<div><strong>🐱 حیوان مورد علاقه:</strong> ${item.favoriteAnimal}</div>`;
+                    if (item.favoriteSeason) html += `<div><strong>🍁 فصل مورد علاقه:</strong> ${item.favoriteSeason}</div>`;
+                    if (item.favoriteFlower) html += `<div><strong>🌹 گل مورد علاقه:</strong> ${item.favoriteFlower}</div>`;
+                    if (item.favoriteEntertainment) html += `<div><strong>🎯 تفریح مورد علاقه:</strong> ${item.favoriteEntertainment}</div>`;
+                    if (item.extra) html += `<div class="item-reason" style="margin-top: 10px;"><strong>💡 حرف دل:</strong> ${item.extra}</div>`;
                     itemDiv.innerHTML = html;
                 } else if (section.type === 'text') {
                     itemDiv.innerHTML = `<div>${item.content}</div>`;
                 } else if (section.type === 'media') {
                     if (item.type === 'image') {
-                        itemDiv.innerHTML = `<img src="${item.content}" style="max-width:100%; border-radius:15px;">`;
+                        itemDiv.innerHTML = `<img src="${item.content}">`;
                     } else if (item.type === 'video') {
-                        itemDiv.innerHTML = `<video controls style="max-width:100%; border-radius:15px;"><source src="${item.content}" type="video/mp4"></video>`;
+                        itemDiv.innerHTML = `<video controls><source src="${item.content}" type="video/mp4"></video>`;
                     } else {
-                        itemDiv.innerHTML = `<div>${item.content}</div>`;
+                        itemDiv.innerHTML = `<div style="word-break: break-all;"><a href="${item.content}" target="_blank" style="color:#f1c40f;">🔗 مشاهده و دانلود فایل</a></div>`;
                     }
                 } else if (section.type === 'movie' || section.type === 'song') {
-                    let html = `<div><strong>${item.name}</strong></div>`;
-                    if (item.link) html += `<div><a href="${item.link}" target="_blank" style="color:#f1c40f;">🔗 لینک</a></div>`;
+                    let html = `<div><strong>🎬 ${item.name}</strong></div>`;
+                    if (item.link) html += `<div><a href="${item.link}" target="_blank" style="color:#3498db; font-weight:bold;">🔗 دانلود / پخش آنلاین</a></div>`;
                     if (item.reason) html += `<div class="item-reason">💬 ${item.reason}</div>`;
                     if (item.poster && section.type === 'movie') {
-                        html += `<img src="${item.poster}" style="max-width:100%; border-radius:15px; margin-top:8px;">`;
+                        html += `<img src="${item.poster}">`;
                     }
                     itemDiv.innerHTML = html;
                 } else if (section.type === 'place') {
-                    itemDiv.innerHTML = `<div><strong>${item.location || 'مکان'}</strong>${item.content ? '<br><img src="'+item.content+'" style="max-width:100%">' : ''}</div>`;
+                    let html = `<div><strong>📍 ${item.location || 'مکان ثبت نشده'}</strong></div>`;
+                    if (item.content) html += `<img src="${item.content}">`;
+                    if (item.reason) html += `<div class="item-reason">💬 ${item.reason}</div>`;
+                    itemDiv.innerHTML = html;
                 } else if (section.type === 'game') {
-                    itemDiv.innerHTML = `<div class="game-item"><strong>${item.name}</strong> - <a href="${item.link}" target="_blank">🔗 لینک دانلود</a></div>`;
+                    itemDiv.innerHTML = `<div class="game-item"><strong>🎮 ${item.name}</strong><br><a href="${item.link}" target="_blank">📥 لینک دریافت بازی</a></div>`;
                 } else if (section.type === 'memory') {
-                    let html = `<div><strong>${item.date || 'بدون تاریخ'}</strong></div>`;
-                    html += `<div>${item.content}</div>`;
-                    if (item.image) html += `<img src="${item.image}" style="max-width:100%; border-radius:15px; margin-top:8px;">`;
+                    let html = `<div><strong>📅 ${item.date || 'خاطره رویایی'}</strong></div>`;
+                    html += `<div style="margin-top: 5px; line-height: 1.5;">${item.content}</div>`;
+                    if (item.image) html += `<img src="${item.image}">`;
                     itemDiv.innerHTML = html;
                 }
 
-                if (item.reason && section.hasReason && section.type !== 'movie' && section.type !== 'song' && section.type !== 'info') {
+                // نمایش کامنت/توضیحات در صورت وجود و مجاز بودن
+                if (item.reason && section.hasReason && !['movie', 'song', 'place', 'info'].includes(section.type)) {
                     itemDiv.innerHTML += `<div class="item-reason">💬 ${item.reason}</div>`;
                 }
 
+                // دکمه حذف
                 const delBtn = document.createElement('button');
                 delBtn.className = 'delete-btn';
                 delBtn.innerHTML = '🗑️';
                 delBtn.onclick = () => {
-                    if (confirm('آیا مطمئنی؟')) {
+                    customConfirm('آیا از حذف دائمی این مورد اطمینان داری؟', () => {
                         items.splice(index, 1);
                         saveProfileData(profile, section.id, items);
                         renderItems(profile, section, items, container);
-                    }
+                    });
                 };
                 itemDiv.appendChild(delBtn);
                 container.appendChild(itemDiv);
             });
         }
 
+        // رفع باگ و تصحیح متغیرهای جابجا شده در این تابع
         function renderSharedItems(profile, section, items, container) {
             container.innerHTML = '';
+            if (items.length === 0) {
+                container.innerHTML = '<div style="text-align:center; opacity:0.6; font-size:0.9rem; padding: 20px 0;">هنوز متنی نوشته نشده است</div>';
+                return;
+            }
+
             items.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
                 const isOwn = (profile === 'mehran' && item.sender === 'مهران') || (profile === 'melorin' && item.sender === 'ملورین');
                 itemDiv.className = `chat-message ${isOwn ? 'own' : ''}`;
                 itemDiv.innerHTML = `
                     <div class="chat-sender">${item.sender}</div>
-                    <div>${item.content}</div>
+                    <div style="line-height:1.5;">${item.content}</div>
                     <button class="chat-delete" onclick="deleteSharedItem('${profile}', '${section.id}', ${index})">🗑️</button>
                 `;
                 container.appendChild(itemDiv);
             });
+            // اسکرول به پایین‌ترین بخش به طور خودکار
             container.scrollTop = container.scrollHeight;
         }
 
         window.deleteSharedItem = function(profile, sectionId, index) {
-            if (confirm('آیا مطمئنی؟')) {
+            customConfirm('آیا می‌خواهی این یادداشت/نامه را حذف کنی؟', () => {
                 const items = getProfileData(profile, sectionId);
                 items.splice(index, 1);
                 saveProfileData(profile, sectionId, items);
                 const container = document.getElementById(`${profile}_${sectionId}_items`);
                 const section = profileSections.find(s => s.id === sectionId);
                 renderSharedItems(profile, section, items, container);
-            }
+            });
         };
 
+        // رفع خطاهای باز کردن فرم‌ها
         function showAddForm(profile, section) {
             const formId = `${profile}_${section.id}_form`;
             const formDiv = document.getElementById(formId);
             if (!formDiv) return;
+            
+            // بستن تمام فرم‌های باز دیگر برای جلوگیری از شلوغی رابط کاربری
+            document.querySelectorAll(`.add-form`).forEach(f => {
+                if (f.id !== formId) f.classList.remove('active');
+            });
+
             formDiv.classList.toggle('active');
             if (!formDiv.classList.contains('active')) return;
 
             let html = '';
             if (section.addType === 'info') {
                 html = `
-                    <input type="file" id="${profile}_${section.id}_profilePic" accept="image/*" placeholder="عکس پروفایل">
-                    <input type="text" id="${profile}_${section.id}_name" placeholder="نام">
-                    <input type="text" id="${profile}_${section.id}_birth" placeholder="تاریخ تولد">
+                    <label>📸 آپلود عکس پروفایل:</label>
+                    <input type="file" id="${profile}_${section.id}_profilePic" accept="image/*">
+                    <input type="text" id="${profile}_${section.id}_name" placeholder="نام و نام خانوادگی">
+                    <input type="text" id="${profile}_${section.id}_birth" placeholder="تاریخ تولد (مثلا ۱۳۸۰/۱۲/۱۰)">
                     <input type="text" id="${profile}_${section.id}_birthPlace" placeholder="محل تولد">
-                    <input type="text" id="${profile}_${section.id}_livingPlace" placeholder="محل زندگی">
-                    <input type="text" id="${profile}_${section.id}_favoriteFood" placeholder="خوراکی مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_livingPlace" placeholder="محل سکونت فعلی">
+                    <input type="text" id="${profile}_${section.id}_favoriteFood" placeholder="خوراکی و غذای مورد علاقه">
                     <input type="text" id="${profile}_${section.id}_favoriteSport" placeholder="ورزش مورد علاقه">
-                    <input type="text" id="${profile}_${section.id}_favoriteColor" placeholder="رنگ مورد علاقه">
-                    <input type="text" id="${profile}_${section.id}_favoriteMovie" placeholder="فیلم مورد علاقه">
-                    <input type="text" id="${profile}_${section.id}_favoriteMusic" placeholder="آهنگ مورد علاقه">
-                    <input type="text" id="${profile}_${section.id}_favoriteBook" placeholder="کتاب مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteColor" placeholder="رنگ‌های مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteMovie" placeholder="فیلم و سریال مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteMusic" placeholder="آهنگ یا خواننده مورد علاقه">
+                    <input type="text" id="${profile}_${section.id}_favoriteBook" placeholder="کتاب محبوب">
                     <input type="text" id="${profile}_${section.id}_favoriteAnimal" placeholder="حیوان مورد علاقه">
                     <input type="text" id="${profile}_${section.id}_favoriteSeason" placeholder="فصل مورد علاقه">
                     <input type="text" id="${profile}_${section.id}_favoriteFlower" placeholder="گل مورد علاقه">
-                    <input type="text" id="${profile}_${section.id}_favoriteEntertainment" placeholder="تفریح مورد علاقه">
-                    <textarea id="${profile}_${section.id}_extra" placeholder="✨ یه چیز دیگه"></textarea>
-                    <button onclick="addInfoItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <input type="text" id="${profile}_${section.id}_favoriteEntertainment" placeholder="تفریح و سرگرمی‌های محبوب">
+                    <textarea id="${profile}_${section.id}_extra" placeholder="✨ هر چیز دیگه ای که دوست داری بگی..."></textarea>
+                    <button onclick="addInfoItem('${profile}', '${section.id}')">💾 ذخیره مشخصات</button>
                     <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
                 `;
             } else if (section.addType === 'text') {
                 html = `
-                    <textarea id="${profile}_${section.id}_text" placeholder="متن خود را بنویسید..."></textarea>
-                    <button onclick="addTextItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <textarea id="${profile}_${section.id}_text" placeholder="حس قشنگت رو اینجا بنویس..." rows="4"></textarea>
+                    <button onclick="addTextItem('${profile}', '${section.id}')">💾 ذخیره یادداشت</button>
                     <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
                 `;
             } else if (section.addType === 'file') {
                 html = `
+                    <label>📁 انتخاب فایل (تصویر یا فیلم):</label>
                     <input type="file" id="${profile}_${section.id}_file" accept="${section.accept}">
-                    <input type="text" id="${profile}_${section.id}_reason" placeholder="💬 دلیل">
-                    <button onclick="addFileItem('${profile}', '${section.id}')">📤 آپلود</button>
+                    <input type="text" id="${profile}_${section.id}_reason" placeholder="💬 چرا اینو دوست داری؟">
+                    <button onclick="addFileItem('${profile}', '${section.id}')">📤 آپلود رسانه</button>
                     <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
                 `;
             } else if (section.addType === 'location') {
                 html = `
-                    <input type="text" id="${profile}_${section.id}_location" placeholder="نام مکان">
+                    <input type="text" id="${profile}_${section.id}_location" placeholder="کجا دوست داری بریم؟ (مثلا شیراز)">
+                    <label>📸 عکس از اونجا (اختیاری):</label>
                     <input type="file" id="${profile}_${section.id}_file" accept="image/*">
-                    <input type="text" id="${profile}_${section.id}_reason" placeholder="💬 دلیل">
-                    <button onclick="addLocationItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <input type="text" id="${profile}_${section.id}_reason" placeholder="💬 دلیلت رو بنویس">
+                    <button onclick="addLocationItem('${profile}', '${section.id}')">💾 ثبت مکان رویایی</button>
                     <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
                 `;
             } else if (section.addType === 'game') {
                 html = `
                     <input type="text" id="${profile}_${section.id}_name" placeholder="نام بازی">
-                    <input type="url" id="${profile}_${section.id}_link" placeholder="لینک دانلود">
-                    <button onclick="addGameItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <input type="url" id="${profile}_${section.id}_link" placeholder="لینک دانلود بازی">
+                    <button onclick="addGameItem('${profile}', '${section.id}')">💾 ثبت بازی</button>
                     <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
                 `;
             } else if (section.addType === 'movie' || section.addType === 'song') {
                 html = `
-                    <input type="text" id="${profile}_${section.id}_name" placeholder="نام">
-                    <input type="url" id="${profile}_${section.id}_link" placeholder="لینک دانلود">
-                    <input type="text" id="${profile}_${section.id}_reason" placeholder="💬 دلیل">
-                    ${section.addType === 'movie' ? `<input type="file" id="${profile}_${section.id}_poster" accept="image/*" placeholder="پوستر">` : ''}
-                    <button onclick="addMovieSongItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <input type="text" id="${profile}_${section.id}_name" placeholder="نام فیلم / موزیک">
+                    <input type="url" id="${profile}_${section.id}_link" placeholder="لینک دانلود / پخش آنلاین (اختیاری)">
+                    <input type="text" id="${profile}_${section.id}_reason" placeholder="💬 چرا پیشنهادش می‌کنی؟">
+                    ${section.addType === 'movie' ? `<label>🖼️ پوستر فیلم (اختیاری):</label><input type="file" id="${profile}_${section.id}_poster" accept="image/*">` : ''}
+                    <button onclick="addMovieSongItem('${profile}', '${section.id}')">💾 ثبت نهایی</button>
                     <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
                 `;
             } else if (section.addType === 'memory') {
                 html = `
-                    <input type="date" id="${profile}_${section.id}_date" placeholder="تاریخ">
-                    <textarea id="${profile}_${section.id}_text" placeholder="متن خاطره"></textarea>
+                    <label>📅 تاریخ ثبت خاطره:</label>
+                    <input type="date" id="${profile}_${section.id}_date">
+                    <textarea id="${profile}_${section.id}_text" placeholder="شرح این خاطره زیبا و فراموش‌نشدنی..." rows="4"></textarea>
+                    <label>📸 عکس یادگاری از این خاطره (اختیاری):</label>
                     <input type="file" id="${profile}_${section.id}_file" accept="image/*">
-                    <button onclick="addMemoryItem('${profile}', '${section.id}')">💾 ذخیره</button>
+                    <button onclick="addMemoryItem('${profile}', '${section.id}')">💾 ثبت در دفتر خاطرات</button>
                     <button class="cancel" onclick="document.getElementById('${formId}').classList.remove('active')">❌ انصراف</button>
                 `;
             }
             formDiv.innerHTML = html;
         }
 
+        // سیستم هوشمند هندل کردن فایل‌های با حجم بالا و اطلاعات
         window.addInfoItem = function(profile, sectionId) {
             const profilePicInput = document.getElementById(`${profile}_${sectionId}_profilePic`);
             const name = document.getElementById(`${profile}_${sectionId}_name`).value.trim();
@@ -1031,27 +1247,11 @@
             const favoriteEntertainment = document.getElementById(`${profile}_${sectionId}_favoriteEntertainment`).value.trim();
             const extra = document.getElementById(`${profile}_${sectionId}_extra`).value.trim();
 
-            if (profilePicInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const items = getProfileData(profile, sectionId);
-                    items.push({
-                        profilePic: e.target.result,
-                        name, birth, birthPlace, livingPlace, favoriteFood, favoriteSport,
-                        favoriteColor, favoriteMovie, favoriteMusic, favoriteBook,
-                        favoriteAnimal, favoriteSeason, favoriteFlower, favoriteEntertainment, extra
-                    });
-                    saveProfileData(profile, sectionId, items);
-                    const container = document.getElementById(`${profile}_${sectionId}_items`);
-                    const section = profileSections.find(s => s.id === sectionId);
-                    renderItems(profile, section, items, container);
-                    document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
-                };
-                reader.readAsDataURL(profilePicInput.files[0]);
-            } else {
-                const items = getProfileData(profile, sectionId);
+            const items = getProfileData(profile, sectionId);
+
+            const saveProcess = (imgData = null) => {
                 items.push({
-                    profilePic: null,
+                    profilePic: imgData,
                     name, birth, birthPlace, livingPlace, favoriteFood, favoriteSport,
                     favoriteColor, favoriteMovie, favoriteMusic, favoriteBook,
                     favoriteAnimal, favoriteSeason, favoriteFlower, favoriteEntertainment, extra
@@ -1061,6 +1261,16 @@
                 const section = profileSections.find(s => s.id === sectionId);
                 renderItems(profile, section, items, container);
                 document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+            };
+
+            if (profilePicInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveProcess(e.target.result);
+                };
+                reader.readAsDataURL(profilePicInput.files[0]);
+            } else {
+                saveProcess();
             }
         };
 
@@ -1069,12 +1279,14 @@
             if (!text) return;
             const items = getProfileData(profile, sectionId);
             const section = profileSections.find(s => s.id === sectionId);
+            
             if (section.type === 'sharedText') {
                 const sender = (profile === 'mehran') ? 'مهران' : 'ملورین';
                 items.push({ sender: sender, content: text });
             } else {
                 items.push({ content: text });
             }
+            
             saveProfileData(profile, sectionId, items);
             const container = document.getElementById(`${profile}_${sectionId}_items`);
             if (section.type === 'sharedText') {
@@ -1111,24 +1323,24 @@
             const fileInput = document.getElementById(`${profile}_${sectionId}_file`);
             const reason = document.getElementById(`${profile}_${sectionId}_reason`).value.trim();
             const items = getProfileData(profile, sectionId);
-            if (fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    items.push({ location: location, content: e.target.result, reason: reason });
-                    saveProfileData(profile, sectionId, items);
-                    const container = document.getElementById(`${profile}_${sectionId}_items`);
-                    const section = profileSections.find(s => s.id === sectionId);
-                    renderItems(profile, section, items, container);
-                    document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                items.push({ location: location, content: null, reason: reason });
+
+            const saveProcess = (imgData = null) => {
+                items.push({ location: location, content: imgData, reason: reason });
                 saveProfileData(profile, sectionId, items);
                 const container = document.getElementById(`${profile}_${sectionId}_items`);
                 const section = profileSections.find(s => s.id === sectionId);
                 renderItems(profile, section, items, container);
                 document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+            };
+
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveProcess(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                saveProcess();
             }
         };
 
@@ -1152,24 +1364,24 @@
             const posterInput = document.getElementById(`${profile}_${sectionId}_poster`);
             if (!name) return;
             const items = getProfileData(profile, sectionId);
-            if (posterInput && posterInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    items.push({ name: name, link: link, reason: reason, poster: e.target.result });
-                    saveProfileData(profile, sectionId, items);
-                    const container = document.getElementById(`${profile}_${sectionId}_items`);
-                    const section = profileSections.find(s => s.id === sectionId);
-                    renderItems(profile, section, items, container);
-                    document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
-                };
-                reader.readAsDataURL(posterInput.files[0]);
-            } else {
-                items.push({ name: name, link: link, reason: reason, poster: null });
+
+            const saveProcess = (imgData = null) => {
+                items.push({ name: name, link: link, reason: reason, poster: imgData });
                 saveProfileData(profile, sectionId, items);
                 const container = document.getElementById(`${profile}_${sectionId}_items`);
                 const section = profileSections.find(s => s.id === sectionId);
                 renderItems(profile, section, items, container);
                 document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+            };
+
+            if (posterInput && posterInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveProcess(e.target.result);
+                };
+                reader.readAsDataURL(posterInput.files[0]);
+            } else {
+                saveProcess();
             }
         };
 
@@ -1179,24 +1391,24 @@
             const fileInput = document.getElementById(`${profile}_${sectionId}_file`);
             if (!text) return;
             const items = getProfileData(profile, sectionId);
-            if (fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    items.push({ date: date, content: text, image: e.target.result });
-                    saveProfileData(profile, sectionId, items);
-                    const container = document.getElementById(`${profile}_${sectionId}_items`);
-                    const section = profileSections.find(s => s.id === sectionId);
-                    renderItems(profile, section, items, container);
-                    document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                items.push({ date: date, content: text, image: null });
+
+            const saveProcess = (imgData = null) => {
+                items.push({ date: date, content: text, image: imgData });
                 saveProfileData(profile, sectionId, items);
                 const container = document.getElementById(`${profile}_${sectionId}_items`);
                 const section = profileSections.find(s => s.id === sectionId);
                 renderItems(profile, section, items, container);
                 document.getElementById(`${profile}_${sectionId}_form`).classList.remove('active');
+            };
+
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveProcess(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                saveProcess();
             }
         };
 
@@ -1213,15 +1425,21 @@
             input.value = '';
         };
 
+        // رفع باگ متغیر جابجا شده (msg/item) در رندر چت‌ها
         function renderChatMessages(profile, messages, container) {
             container.innerHTML = '';
+            if (messages.length === 0) {
+                container.innerHTML = '<div style="text-align:center; opacity:0.6; font-size:0.9rem; padding: 20px 0;">گفتگو را شروع کنید</div>';
+                return;
+            }
+
             messages.forEach((msg, index) => {
                 const div = document.createElement('div');
-                const isOwn = (profile === 'mehran' && item.sender === 'مهران') || (profile === 'melorin' && item.sender === 'ملورین');
+                const isOwn = (profile === 'mehran' && msg.sender === 'مهران') || (profile === 'melorin' && msg.sender === 'ملورین');
                 div.className = `chat-message ${isOwn ? 'own' : ''}`;
                 div.innerHTML = `
                     <div class="chat-sender">${msg.sender}</div>
-                    <div>${msg.content}</div>
+                    <div style="line-height:1.5;">${msg.content}</div>
                     <button class="chat-delete" onclick="deleteChatMessage('${profile}', ${index})">🗑️</button>
                 `;
                 container.appendChild(div);
@@ -1230,52 +1448,69 @@
         }
 
         window.deleteChatMessage = function(profile, index) {
-            if (confirm('آیا مطمئنی؟')) {
+            customConfirm('آیا می‌خواهی این پیام چت را حذف کنی؟', () => {
                 const messages = getProfileData(profile, 'chat');
                 messages.splice(index, 1);
                 saveProfileData(profile, 'chat', messages);
                 const container = document.getElementById(`${profile}_chat_items`);
                 renderChatMessages(profile, messages, container);
-            }
+            });
         };
 
-        function renderProfile(profile) {
-            const containerId = profile === 'mehran' ? 'mehran-sections' : 'melorin-sections';
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
+        // رندر و لود کارت‌های پروفایل
+		function renderProfile(profile) {
+		    const containerId = profile === 'mehran' ? 'mehran-sections' : 'melorin-sections';
+		    const container = document.getElementById(containerId);
+		    container.innerHTML = '';
+		
+		    profileSections.forEach(section => {
+		        const items = getProfileData(profile, section.id);
+		        const card = document.createElement('div');
+		        card.className = 'section-card';
+		        card.innerHTML = `
+		            <div>
+		                <div class="section-title">${section.title}</div>
+		                <div class="items-container" id="${profile}_${section.id}_items"></div>
+		            </div>
+		            <div id="${profile}_${section.id}_action_zone">
+		                ${section.id !== 'chat' ? `<button class="add-btn" onclick="showAddForm('${profile}', ${JSON.stringify(section).replace(/"/g, '&quot;')})">➕ افزودن به این بخش</button>` : ''}
+		                <div id="${profile}_${section.id}_form" class="add-form"></div>
+		            </div>
+		        `;
+		        container.appendChild(card);
+		
+		        const itemsContainer = document.getElementById(`${profile}_${section.id}_items`);
+		        if (section.id === 'chat') {
+		            renderChatMessages(profile, items, itemsContainer);
+		            
+		            // ساخت باکس چت در زون اختصاصی دکمه‌ها برای تراز شدن دقیق
+		            const actionZone = card.querySelector(`#${profile}_${section.id}_action_zone`);
+		            const inputArea = document.createElement('div');
+		            inputArea.className = 'chat-input-area';
+		            inputArea.innerHTML = `
+		                <input type="text" id="${profile}_chat_input" placeholder="✏️ پیامت را بنویس..." autocomplete="off">
+		                <button onclick="sendChatMessage('${profile}')">ارسال</button>
+		            `;
+		            actionZone.appendChild(inputArea);
+		            
+		            // با زدن دکمه اینتر چت ارسال شود
+		            const chatInput = document.getElementById(`${profile}_chat_input`);
+		            chatInput.addEventListener('keypress', (e) => {
+		                if (e.key === 'Enter') {
+		                    sendChatMessage(profile);
+		                }
+		            });
+		        } else if (section.type === 'sharedText') {
+		            renderSharedItems(profile, section, items, itemsContainer);
+		        } else {
+		            renderItems(profile, section, items, itemsContainer);
+		        }
+		    });
+		}
 
-            profileSections.forEach(section => {
-                const items = getProfileData(profile, section.id);
-                const card = document.createElement('div');
-                card.className = 'section-card';
-                card.innerHTML = `
-                    <div class="section-title">${section.title}</div>
-                    <div class="items-container" id="${profile}_${section.id}_items"></div>
-                    ${section.id !== 'chat' ? `<button class="add-btn" onclick="showAddForm('${profile}', ${JSON.stringify(section).replace(/"/g, '&quot;')})">➕ افزودن</button>` : ''}
-                    <div id="${profile}_${section.id}_form" class="add-form"></div>
-                `;
-                container.appendChild(card);
-
-                const itemsContainer = document.getElementById(`${profile}_${section.id}_items`);
-                if (section.id === 'chat') {
-                    renderChatMessages(profile, items, itemsContainer);
-                    const inputArea = document.createElement('div');
-                    inputArea.className = 'chat-input-area';
-                    inputArea.innerHTML = `
-                        <input type="text" id="${profile}_chat_input" placeholder="✏️ پیامت را بنویس...">
-                        <button onclick="sendChatMessage('${profile}')">📤 ارسال</button>
-                    `;
-                    card.appendChild(inputArea);
-                } else if (section.type === 'sharedText') {
-                    renderSharedItems(profile, section, items, itemsContainer);
-                } else {
-                    renderItems(profile, section, items, itemsContainer);
-                }
-            });
-        }
-
+        // تغییر رمز عبور به صورت کاملا ایمن
         window.changePassword = function(profile) {
-            const newPass = prompt('رمز جدید را وارد کنید:');
+            const newPass = prompt('رمز عبور جدید را وارد کنید:');
             if (newPass && newPass.trim() !== '') {
                 if (profile === 'mehran') {
                     MEHRAN_PASSWORD = newPass.trim();
@@ -1284,10 +1519,11 @@
                     MELORIN_PASSWORD = newPass.trim();
                     localStorage.setItem('melorin_password', MELORIN_PASSWORD);
                 }
-                alert('✅ رمز با موفقیت تغییر یافت.');
+                alert('✅ رمز عبور با موفقیت تغییر یافت.');
             }
         };
 
+        // دکمه ورود صفحه اول
         submitBtn.addEventListener('click', function() {
             const entered = passwordInput.value.trim();
             if (entered === MAIN_PASSWORD) {
@@ -1295,7 +1531,7 @@
                 errorDiv.textContent = '';
                 sessionStorage.setItem('loggedIn', 'true');
             } else {
-                errorDiv.textContent = '❌ اگه یادت نیومد پی ویم بپرس عزیزم';
+                errorDiv.textContent = '❌ رمز عبور اشتباه است، عزیزم پی‌وی بپرس';
                 passwordInput.value = '';
             }
         });
@@ -1304,6 +1540,7 @@
             if (e.key === 'Enter') submitBtn.click();
         });
 
+        // کلیک روی باکس‌های صفحه اصلی
         document.querySelectorAll('.box').forEach(box => {
             box.addEventListener('click', function() {
                 const profile = this.dataset.profile;
@@ -1312,14 +1549,16 @@
                     showPage(publicPage);
                 } else {
                     pendingProfile = profile;
-                    modalTitle.innerText = (profile === 'mehran') ? 'رمز مهران' : 'رمز ملورین';
+                    modalTitle.innerText = (profile === 'mehran') ? 'ورود به پروفایل مهران' : 'ورود به پروفایل ملورین';
                     modalPassword.value = '';
                     modalError.textContent = '';
                     modal.classList.add('active');
+                    setTimeout(() => modalPassword.focus(), 150);
                 }
             });
         });
 
+        // سابمیت کردن پاپ‌آپ تایید رمز عبور اختصاصی
         modalSubmit.addEventListener('click', function() {
             const entered = modalPassword.value.trim();
             const correct = (pendingProfile === 'mehran' && entered === MEHRAN_PASSWORD) ||
@@ -1332,8 +1571,12 @@
                 sessionStorage.setItem('activeProfile', pendingProfile);
                 pendingProfile = null;
             } else {
-                modalError.textContent = '❌ اگه یادت نیومد پی ویم بپرس عزیزم';
+                modalError.textContent = '❌ رمز نادرسته عزیزم، یادت نمیاد بپرس';
             }
+        });
+
+        modalPassword.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') modalSubmit.click();
         });
 
         modalCancel.addEventListener('click', () => {
@@ -1348,6 +1591,7 @@
             }
         });
 
+        // مدیریت لود وضعیت مرورگر و بازسازی امن آخرین صفحه
         window.addEventListener('load', function() {
             const loggedIn = sessionStorage.getItem('loggedIn');
             const activeProfile = sessionStorage.getItem('activeProfile');
@@ -1363,8 +1607,6 @@
                 } else if (lastPage === 'public-page') {
                     updatePublicPage();
                     showPage(publicPage);
-                } else if (lastPage === 'main-page') {
-                    showPage(mainPage);
                 } else {
                     showPage(mainPage);
                 }
@@ -1374,6 +1616,7 @@
             }
         });
 
+        // آپدیت ثانیه‌ای تایمر
         setInterval(() => {
             if (publicPage.classList.contains('active')) {
                 updatePublicPage();
